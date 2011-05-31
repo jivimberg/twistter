@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class LoginLayout extends Activity {
+public class Login extends Activity {
     EditText un,pw;
 	TextView error;
     Button ok;
@@ -29,15 +29,15 @@ public class LoginLayout extends Activity {
         error=(TextView)findViewById(R.id.textview_error);
         logo = (ImageView) findViewById(R.id.logo);
 
-
         ok.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
 
             	if(pw.getText().toString().equals("pass"))
             	    	error.setText("Correct Username or Password");
-            	    else
+            	else
             	    	error.setText("Sorry!! Incorrect Username or Password");
+            			
             	} 
         	
             
