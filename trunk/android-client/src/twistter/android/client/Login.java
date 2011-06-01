@@ -39,7 +39,7 @@ public class Login extends Activity {
 
             	if(pw.getText().toString().equals("pass")){
             	    	error.setText("GOL");
-            	    	Timeline timeline = new Timeline();
+            	    	//Timeline timeline = new Timeline();
             	    	
             	}else{
             	    	error.setText("Incorrect Username or Password");
