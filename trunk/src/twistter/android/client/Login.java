@@ -6,12 +6,16 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Login extends Activity {
     EditText un,pw;
@@ -33,14 +37,20 @@ public class Login extends Activity {
 
             public void onClick(View v) {
 
-            	if(pw.getText().toString().equals("pass"))
-            	    	error.setText("Correct Username or Password");
-            	else
-            	    	error.setText("Sorry!! Incorrect Username or Password");
-            			
-            	} 
+            	if(pw.getText().toString().equals("pass")){
+            	    	error.setText("GOL");
+            	    	Timeline timeline = new Timeline();
+            	    	
+            	}else{
+            	    	error.setText("Incorrect Username or Password");
+            	}
+            } 
         	
             
         });
+        
+        
     }
+    
+
 }
