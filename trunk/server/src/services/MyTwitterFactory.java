@@ -1,5 +1,4 @@
 package services;
-import data.ConsumerData;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 
