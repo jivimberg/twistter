@@ -9,4 +9,28 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
+	
+	<servlet>
+		<description>LoginServlet</description>
+		<display-name>LoginServlet</display-name>
+		<servlet-name>LoginServlet</servlet-name>
+		<servlet-class>servlet.LoginServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>LoginServlet</servlet-name>
+		<url-pattern>/LoginServlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<description>TimelineServlet</description>
+		<display-name>TimelineServlet</display-name>
+		<servlet-name>TimelineServlet</servlet-name>
+		<servlet-class>servlet.TimelineServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>TimelineServlet</servlet-name>
+		<url-pattern>/TimelineServlet</url-pattern>
+	</servlet-mapping>
 </web-app>

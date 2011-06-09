@@ -9,9 +9,9 @@ public abstract class GenericServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 2483902181864313142L;
 
-	public abstract void doPost(final HttpServletRequest req, HttpServletResponse res);
+	public abstract void doPost(HttpServletRequest req, HttpServletResponse res);
 	
-	public void doGet (final HttpServletRequest req, HttpServletResponse res) {
+	public void doGet (HttpServletRequest req, HttpServletResponse res) {
 		this.doPost(req, res);
 	}
 
