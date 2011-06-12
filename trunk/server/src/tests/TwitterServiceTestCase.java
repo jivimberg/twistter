@@ -6,11 +6,11 @@ import junit.framework.TestCase;
 
 public class TwitterServiceTestCase extends TestCase {
 
-	private TwitterService twitterService = new TwitterService();
+	private TwitterService twitterService;
 	
 	public void testUseAccessToken() throws IllegalStateException, TwitterException{
 		final String userId = "jivimberg";
-		twitterService.useAccessToken(userId);
+		twitterService = new TwitterService(userId);
 		
 		assertEquals("The returned user name is not the expected", "Juan Ignacio Vimberg" , twitterService.getName());
 	}

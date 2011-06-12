@@ -20,6 +20,15 @@ public class TwitterService {
 	private AccessTokenDAO accessTokenDAO;
 	
 	public TwitterService(){
+		initialize();
+	}
+	
+	public TwitterService(String userId){
+		initialize();
+		useAccessToken(userId);
+	}
+	
+	public void initialize(){
 		myTwitter = MyTwitterFactory.createAuthenticatedService();
 		accessTokenDAO = new FileAccessTokenDAO();
 	}
