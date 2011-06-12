@@ -13,10 +13,10 @@ import utils.JSONUtils;
 
 public class JSONTestCase extends TestCase {
 
-	private TwitterService twitterService = new TwitterService();
+	private TwitterService twitterService;
 	
 	public void testsStatusToJSON() throws TwitterException, JSONException{
-		twitterService.useAccessToken("jivimberg");
+		twitterService = new TwitterService("jivimberg");
 		
 		List<Status> timeline = twitterService.getHomeTimeline();
 		Status status = timeline.get(0);
