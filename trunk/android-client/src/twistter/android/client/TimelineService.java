@@ -1,7 +1,11 @@
 package twistter.android.client;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
 import android.app.Service;
@@ -48,10 +52,21 @@ public class TimelineService extends Service {
 			this.timer=new Timer();
 
 			// Configuramos lo que tiene que hacer
+			
+			
 			this.timer.scheduleAtFixedRate(
 				new TimerTask(){
 					public void run(){
-						ejecutarTarea();
+						ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+		            	
+		            	postParameters.add(new BasicNameValuePair("method", "getTimeline"));
+
+		            	String response = null;
+		            	try {
+		            	    response = TwistterHttpClient.executeHttpPost("http://127.0.0.1/TimelineServlet", postParameters);
+		            	} catch (Exception e) {
+		            	    e.printStackTrace();
+		            	}
 					}
 				},
 				0,

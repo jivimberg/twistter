@@ -59,7 +59,7 @@ public class Login extends Activity {
 
             	String response = null;
             	try {
-            	    response = TwistterHttpClient.executeHttpPost("http://www.google.com", postParameters);
+            	    response = TwistterHttpClient.executeHttpPost("http://L/LoginServlet", postParameters);
             	} catch (Exception e) {
             	    e.printStackTrace();
             	}   	
