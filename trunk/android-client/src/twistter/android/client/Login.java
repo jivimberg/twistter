@@ -64,8 +64,8 @@ public class Login extends Activity {
             	    e.printStackTrace();
             	}   	
             	
-            	if(response == "true"){
-
+            	if(response != "true"){ // False for debugging purposes, make it true
+            		
             		if(savepass.isChecked()){
                         getSharedPreferences(PREFS_NAME,MODE_PRIVATE)
                             .edit()
@@ -75,7 +75,10 @@ public class Login extends Activity {
                         Toast.makeText(getApplicationContext(),"Saved Successfully",Toast.LENGTH_LONG).show();
                         //Ver si sacamos el toast
             		}
-            	    	Timeline timeline = new Timeline(); 	
+            	    	Intent myIntent = new Intent(Login.this, Timeline.class);
+            	    	Login.this.startActivity(myIntent);
+                        Toast.makeText(getApplicationContext(),"Logged in Successfully",Toast.LENGTH_SHORT).show();
+
             	}else{
             	    	error.setText("Incorrect Username or Password");
             	}
