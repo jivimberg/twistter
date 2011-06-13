@@ -22,13 +22,15 @@ public class Timeline extends Activity{
 
 	    try{
 			Log.i(getClass().getSimpleName(), "Iniciando servicio desde el login...");
+		    Intent timelineService = new Intent(this, TimelineService.class);
+		    
+		    if(startService(timelineService)==null){
+                this.notificar("No se ha podido iniciar el servicio");
 
-		    Intent servicio = new Intent(this, TimelineService.class);
-		    if(startService(servicio)==null){
-		    	this.notificar("No se ha podido iniciar el servicio");
 		    }
 		    else{
-		    	this.notificar("Servicio iniciado correctamente");
+
+                this.notificar("Servicio iniciado correctamente");
 		    }
 	    }
 	    catch(Exception e){
@@ -39,13 +41,8 @@ public class Timeline extends Activity{
     
     private void notificar(String cadena)
 	{
-		Context contexto = getApplicationContext();
+        Toast.makeText(getApplicationContext(),cadena,Toast.LENGTH_SHORT).show();
 
-		CharSequence texto = cadena;
-		int duracion = Toast.LENGTH_SHORT;
-
-		Toast toast = Toast.makeText(contexto, texto, duracion);
-		toast.show();
 	}
 
 }

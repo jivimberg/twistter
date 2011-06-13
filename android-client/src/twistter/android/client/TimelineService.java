@@ -57,16 +57,8 @@ public class TimelineService extends Service {
 			this.timer.scheduleAtFixedRate(
 				new TimerTask(){
 					public void run(){
-						ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-		            	
-		            	postParameters.add(new BasicNameValuePair("method", "getTimeline"));
-
-		            	String response = null;
-		            	try {
-		            	    response = TwistterHttpClient.executeHttpPost("http://127.0.0.1/TimelineServlet", postParameters);
-		            	} catch (Exception e) {
-		            	    e.printStackTrace();
-		            	}
+						ejecutarTarea();
+						
 					}
 				},
 				0,
@@ -98,6 +90,17 @@ public class TimelineService extends Service {
 	private void ejecutarTarea(){
 		Log.i(getClass().getSimpleName(), "Trayendo timeline...");
 
+		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+    	
+    	postParameters.add(new BasicNameValuePair("method", "getTimeline"));
+
+    	String response = null;
+    	try {
+    	    response = TwistterHttpClient.executeHttpPost("http://127.0.0.1/TimelineServlet", postParameters);
+    	    
+    	} catch (Exception e) {
+    	    e.printStackTrace();
+    	}
 		// Reflejamos la tarea en la actividad principal
 		TimelineService.ACTIVIDAD.runOnUiThread(new Runnable(){
 				public void run(){
