@@ -10,7 +10,6 @@ import org.apache.http.message.BasicNameValuePair;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.TextView;
@@ -104,9 +103,10 @@ public class TimelineService extends Service {
 		// Reflejamos la tarea en la actividad principal
 		TimelineService.ACTIVIDAD.runOnUiThread(new Runnable(){
 				public void run(){
+					TextView tweet=(TextView)TimelineService.ACTIVIDAD.findViewById(R.id.textview_error);
 					//TextView ejecuciones=(TextView)TimelineService.ACTIVIDAD.findViewById(R.id.TextView01);
 					//ejecuciones.append(".");
-					//Aca podriamos poner algun loguito que refleje la conectividad
+
 				}
 			}
 		);
