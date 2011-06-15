@@ -24,8 +24,7 @@ public class TimelineService extends Service {
 
 	public void onCreate(){
 		super.onCreate();
-
-		// Iniciamos el servicio
+		
 		this.iniciarServicio();
 
 		Log.i(getClass().getSimpleName(), "Servicio iniciado");
@@ -103,8 +102,7 @@ public class TimelineService extends Service {
 		// Reflejamos la tarea en la actividad principal
 		TimelineService.ACTIVIDAD.runOnUiThread(new Runnable(){
 				public void run(){
-					TextView tweet=(TextView)TimelineService.ACTIVIDAD.findViewById(R.id.textview_error);
-					//TextView ejecuciones=(TextView)TimelineService.ACTIVIDAD.findViewById(R.id.TextView01);
+					TimelineService.ACTIVIDAD.findViewById(R.id.tweet_username);
 					//ejecuciones.append(".");
 
 				}

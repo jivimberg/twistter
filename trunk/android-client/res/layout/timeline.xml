@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
-android:id="@+id/widget30"
+android:id="@+id/scroll_view"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
 xmlns:android="http://schemas.android.com/apk/res/android"
 >
 <AbsoluteLayout
-android:id="@+id/widget36"
+android:id="@+id/layout"
 android:layout_width="314px"
 android:layout_height="432px"
 >
 <ImageView
-android:id="@+id/widget37"
+android:id="@+id/tweet_user_image"
 android:layout_width="70px"
 android:layout_height="65px"
 android:layout_x="27px"
@@ -19,7 +19,7 @@ android:layout_y="26px"
 >
 </ImageView>
 <TextView
-android:id="@+id/widget47"
+android:id="@+id/tweet_username"
 android:layout_width="187px"
 android:layout_height="wrap_content"
 android:text="TextView"
@@ -28,7 +28,7 @@ android:layout_y="28px"
 >
 </TextView>
 <TextView
-android:id="@+id/widget48"
+android:id="@+id/tweet_text"
 android:layout_width="181px"
 android:layout_height="43px"
 android:text="TextView"
