@@ -28,7 +28,6 @@ public class Timeline extends Activity{
 			Log.i(getClass().getSimpleName(), "Iniciando servicio desde el login...");
 		    Intent timelineService = new Intent(this, TimelineService.class);
 
-		    EditText test=(EditText)findViewById(R.id.tweet_username);
 		    if(startService(timelineService)==null){
                 this.notificar("No se ha podido iniciar el servicio");
 

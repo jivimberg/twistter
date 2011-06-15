@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TimelineService extends Service {
 	public static Activity ACTIVIDAD;
@@ -94,8 +95,8 @@ public class TimelineService extends Service {
 
     	String response = null;
     	try {
-    	    response = TwistterHttpClient.executeHttpPost("http://127.0.0.1/TimelineServlet", postParameters);
-    	    
+    	    response = TwistterHttpClient.executeHttpPost("http://172.20.19.66:8080/Server/TimelineServlet", postParameters);
+    	    Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
     	} catch (Exception e) {
     	    e.printStackTrace();
     	}
