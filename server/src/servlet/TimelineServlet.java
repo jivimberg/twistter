@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import services.TwitterService;
 import twitter4j.TwitterException;
+import twitter4j.internal.org.json.JSONArray;
 import twitter4j.internal.org.json.JSONException;
 
 public class TimelineServlet extends GenericServlet {
@@ -21,34 +23,25 @@ public class TimelineServlet extends GenericServlet {
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse res) {
 		if (session.getAttribute("username") != null) {
-			String timeline = "";
 			method = (String) req.getAttribute("method");
 			List<String> jsonTimeline = null;
 			if(method == "getTimeline") {
 				try {
 					service.useAccessToken((String)session.getAttribute("username"));
-					timeline = makeStringTimelineForResponse(service.getJSONHomeTimeline());
+					jsonTimeline = service.getJSONHomeTimeline();
+					JSONArray jsonArray = new JSONArray(jsonTimeline);
+					PrintWriter out = res.getWriter();
+					 out.println(jsonArray);
 				} catch (TwitterException e) {
 					e.printStackTrace();
 				} catch (JSONException e) {
 					e.printStackTrace();
-				}
-				try {
-					res.getWriter().write(timeline);
 				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}	
 		}
-	}
-	
-	private String makeStringTimelineForResponse(List<String> jsonTimeline) {
-		StringBuffer buffer = new StringBuffer();
-		for(int i = 0; i < jsonTimeline.size()-1; i++) {
-			buffer.append(jsonTimeline.get(i));
-			buffer.append("&&&");
-		}
-		return buffer.toString();
 	}
 
 }
