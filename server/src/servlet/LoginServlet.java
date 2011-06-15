@@ -20,8 +20,8 @@ public class LoginServlet extends GenericServlet {
 		session = req.getSession(true);
 		if(password.equals("12345")) {
 			if(session != null) {
-				session.setAttribute("username", username);
-				session.setAttribute("password", password);
+				session.setAttribute("username", username.trim());
+				session.setAttribute("password", password.trim());
 				try {
 					res.getWriter().write("true");
 				} catch (IOException e) {
