@@ -52,12 +52,12 @@ public class Login extends Activity {
 
             	String response = null;
             	try {
-            	    response = TwistterHttpClient.executeHttpPost("http://127.0.0.1/LoginServlet", postParameters);
+            	    response = TwistterHttpClient.executeHttpPost("http://172.20.19.66:8080/Server/LoginServlet", postParameters);
             	} catch (Exception e) {
             	    e.printStackTrace();
             	}   	
             	
-            	if(response != "true"){ // False for debugging purposes, make it true
+            	if(response.contains((String)"true")){ 
             		
             		if(savepass.isChecked()){
                         getSharedPreferences(PREFS_NAME,MODE_PRIVATE)
