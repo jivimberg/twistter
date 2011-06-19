@@ -126,23 +126,25 @@ public class TimelineService extends Service {
 					final TextView[] usernames = new TextView[N];
 					final TextView[] tweet = new TextView[N];
 					ScrollView scroll = (ScrollView) TimelineService.ACTIVIDAD.findViewById(R.id.scroll_view);
-					LinearLayout linear_layout = new LinearLayout(TimelineService.ACTIVIDAD);
-					linear_layout.setOrientation(LinearLayout.VERTICAL);
-					scroll.addView(linear_layout);
+					//LinearLayout linear_layout = new LinearLayout(TimelineService.ACTIVIDAD);
+					//linear_layout.setOrientation(LinearLayout.VERTICAL);
+					//scroll.addView(linear_layout);
 
 					for (int i = 0; i < N; i++) {
 						
-					    TextView username = (TextView) TimelineService.ACTIVIDAD.findViewById(R.id.tweet_username);
+					    TextView tweet_username = (TextView) TimelineService.ACTIVIDAD.findViewById(R.id.tweet_username);
 					    TextView tweet_text = (TextView) TimelineService.ACTIVIDAD.findViewById(R.id.tweet_text);
 
-					    username.setText("@lucasapa");
-					    //username.setText(utils.getStatusFromJSON(jsonElements[i]).getUser());
+					    tweet_username.setText("@lucasapaa");
 					    tweet_text.setText("Jivi gay");
+					    //username.setText(utils.getStatusFromJSON(jsonElements[i]).getUser());
 					    //tweet_text.setText(utils.getStatusFromJSON(jsonElements[i]).getText());
-					    linear_layout.addView(username);
-					    linear_layout.addView(tweet_text);
 					    
-					    usernames[i] = username;
+					    scroll.addView(tweet_username);
+					    scroll.addView(tweet_text);
+	
+					    
+					    usernames[i] = tweet_username;
 					    tweet[i] = tweet_text;
 					}
 
