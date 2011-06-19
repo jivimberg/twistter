@@ -7,17 +7,25 @@ import java.util.TimerTask;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import twistter.android.client.utils.TwitterUtils;
+
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class TimelineService extends Service {
 	public static Activity ACTIVIDAD;
 	private Timer timer = null;
+	private Handler handler = new Handler();
+	private TwitterUtils utils = new TwitterUtils();
 
 	public static void establecerActividadPrincipal(Activity actividad){
 		TimelineService.ACTIVIDAD=actividad;
@@ -25,7 +33,6 @@ public class TimelineService extends Service {
 
 	public void onCreate(){
 		super.onCreate();
-		
 		this.iniciarServicio();
 
 		Log.i(getClass().getSimpleName(), "Servicio iniciado");
@@ -52,16 +59,24 @@ public class TimelineService extends Service {
 
 			// Configuramos lo que tiene que hacer
 			
-			
 			this.timer.scheduleAtFixedRate(
 				new TimerTask(){
-					public void run(){
-						ejecutarTarea();
+					public void run() {
+						
+						handler.post(new Runnable() {
+				              public void run() {
+				            	
+				                 ejecutarTarea();
+				                 
+				              }
+				           });
 						
 					}
+						
+					
 				},
 				0,
-				1000	// Cada 1 segundo se repite
+				15000	// Cada 1 segundo se repite
 			);
 
 			Log.i(getClass().getSimpleName(), "Temporizador de timeline iniciado");
@@ -92,20 +107,49 @@ public class TimelineService extends Service {
 		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
     	
     	postParameters.add(new BasicNameValuePair("method", "getTimeline"));
-
     	String response = null;
     	try {
-    	    response = TwistterHttpClient.executeHttpPost("http://172.20.19.66:8080/Server/TimelineServlet", postParameters);
-    	    Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
+    	    response = TwistterHttpClient.executeHttpPost("http://127.0.0.1:8080/Server/TimelineServlet", postParameters);
+    	    String[] jsonElements = response.split("&&&");
     	} catch (Exception e) {
     	    e.printStackTrace();
     	}
+    	
 		// Reflejamos la tarea en la actividad principal
+		
+		
 		TimelineService.ACTIVIDAD.runOnUiThread(new Runnable(){
 				public void run(){
-					TimelineService.ACTIVIDAD.findViewById(R.id.tweet_username);
-					//ejecuciones.append(".");
+					try{
+					
+					final int N = 25; //Quantity of tweets
+					final TextView[] usernames = new TextView[N];
+					final TextView[] tweet = new TextView[N];
+					ScrollView scroll = (ScrollView) TimelineService.ACTIVIDAD.findViewById(R.id.scroll_view);
+					LinearLayout linear_layout = new LinearLayout(TimelineService.ACTIVIDAD);
+					linear_layout.setOrientation(LinearLayout.VERTICAL);
+					scroll.addView(linear_layout);
 
+					for (int i = 0; i < N; i++) {
+						
+					    TextView username = (TextView) TimelineService.ACTIVIDAD.findViewById(R.id.tweet_username);
+					    TextView tweet_text = (TextView) TimelineService.ACTIVIDAD.findViewById(R.id.tweet_text);
+
+					    username.setText("@lucasapa");
+					    //username.setText(utils.getStatusFromJSON(jsonElements[i]).getUser());
+					    tweet_text.setText("Jivi gay");
+					    //tweet_text.setText(utils.getStatusFromJSON(jsonElements[i]).getText());
+					    linear_layout.addView(username);
+					    linear_layout.addView(tweet_text);
+					    
+					    usernames[i] = username;
+					    tweet[i] = tweet_text;
+					}
+
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+				
 				}
 			}
 		);
