@@ -5,6 +5,7 @@ android:layout_width="fill_parent"
 android:layout_height="fill_parent"
 xmlns:android="http://schemas.android.com/apk/res/android"
 >
+    <LinearLayout android:id="@+id/linearLayout3" android:layout_width="match_parent" android:layout_height="match_parent"></LinearLayout>
 <AbsoluteLayout
 android:id="@+id/layout"
 android:layout_width="314px"
@@ -36,5 +37,7 @@ android:layout_x="105px"
 android:layout_y="56px"
 >
 </TextView>
+<LinearLayout android:id="@+id/linearLayout2" android:layout_width="wrap_content" android:layout_height="wrap_content"></LinearLayout>
 </AbsoluteLayout>
+<LinearLayout android:id="@+id/linearLayout1" android:layout_width="match_parent" android:layout_height="match_parent"></LinearLayout>
 </ScrollView>

@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -33,6 +34,7 @@ public class Login extends Activity {
     
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.main);
         un=(EditText)findViewById(R.id.edittext_username);
         pw=(EditText)findViewById(R.id.edittext_password);
@@ -52,7 +54,8 @@ public class Login extends Activity {
 
             	String response = null;
             	try {
-            	    response = TwistterHttpClient.executeHttpPost("http://172.20.19.66:8080/Server/LoginServlet", postParameters);
+            	    //response = TwistterHttpClient.executeHttpPost("http://127.0.0.1:8080/Server/LoginServlet", postParameters);
+            		response = "true";
             	} catch (Exception e) {
             	    e.printStackTrace();
             	}   	
