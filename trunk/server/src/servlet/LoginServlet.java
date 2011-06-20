@@ -18,15 +18,20 @@ public class LoginServlet extends GenericServlet {
 		username = (String) req.getParameter("username");
 		password = (String) req.getParameter("password");
 		session = req.getSession(true);
-		if(password.equals("12345")) {
-			if(session != null) {
-				session.setAttribute("username", username.trim());
-				session.setAttribute("password", password.trim());
-				try {
+		try{
+			if(password.equals("12345")) {
+				if(session != null) {
+					session.setAttribute("username", username.trim());
+					session.setAttribute("password", password.trim());
 					res.getWriter().write("true");
-				} catch (IOException e) {
-					e.printStackTrace();
 				}
+			}			
+		}catch (IOException e) {
+			try {
+				res.getWriter().write("false");
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 		}
 		
