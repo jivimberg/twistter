@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import services.TwitterService;
 import twitter4j.TwitterException;
+import twitter4j.internal.org.json.JSONArray;
 import twitter4j.internal.org.json.JSONException;
 
 public class TimelineServlet extends GenericServlet {
@@ -21,23 +22,25 @@ public class TimelineServlet extends GenericServlet {
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse res) {
 		session = req.getSession(false);
-		method = (String) req.getAttribute("method");
-		if (session.getAttribute("username") != null) {
-			String timeline = "";
+		method = (String) req.getParameter("method");
+		String userId = (String) session.getAttribute("username");
+		if ( userId != null) {
 			List<String> jsonTimeline = null;
 			System.out.println("."+method+".");
-			if(true) {
+			if(method.equals("getTimeline")) {
 				try {
-					service.useAccessToken((String)session.getAttribute("username"));
-					timeline = makeStringTimelineForResponse(service.getJSONHomeTimeline());
+					service.useAccessToken(userId);
+					jsonTimeline = service.getJSONHomeTimeline();
+					JSONArray jsonArray = new JSONArray(jsonTimeline);
+					res.getWriter().write(jsonArray.toString());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				} catch (TwitterException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				try {
-					res.getWriter().write(" holas");
-				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}	
