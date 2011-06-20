@@ -3,6 +3,7 @@ package twistter.android.client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
 
@@ -32,7 +33,7 @@ public class TwistterHttpClient {
         return mHttpClient;
     }
 
-    public static String executeHttpPost(String url, ArrayList<NameValuePair> postParameters) throws Exception {
+    public static String executeHttpPost(String url, ArrayList<NameValuePair> postParameters) {
         BufferedReader in = null;
         try {
             HttpClient client = getHttpClient();
@@ -52,7 +53,10 @@ public class TwistterHttpClient {
 
             String result = sb.toString();
             return result;
-        } finally {
+        } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
             if (in != null) {
                 try {
                     in.close();
@@ -61,6 +65,7 @@ public class TwistterHttpClient {
                 }
             }
         }
+		return null;
     }
 
     public static String executeHttpGet(String url) throws Exception {
