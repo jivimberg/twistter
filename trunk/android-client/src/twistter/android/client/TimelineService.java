@@ -21,6 +21,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -82,7 +83,7 @@ public class TimelineService extends Service {
 					
 				},
 				0,
-				15000	// Cada 1 segundo se repite
+				30000	// Cada 30 segundo se repite
 			);
 
 			Log.i(getClass().getSimpleName(), "Temporizador de timeline iniciado");
@@ -127,17 +128,14 @@ public class TimelineService extends Service {
     	    		try{
     	    			
     	    			final int qtyOfTweets = jsonArray.length(); 
-    	    			final TextView[] usernames = new TextView[qtyOfTweets];
-    	    			final TextView[] tweet = new TextView[qtyOfTweets];
-    	    			ScrollView scroll = (ScrollView) TimelineService.ACTIVIDAD.findViewById(R.id.scroll_view);
-    	    			//LinearLayout linear_layout = new LinearLayout(TimelineService.ACTIVIDAD);
-    	    			//linear_layout.setOrientation(LinearLayout.VERTICAL);
-    	    			//scroll.addView(linear_layout);
+    	    			LinearLayout scroll = (LinearLayout) TimelineService.ACTIVIDAD.findViewById(R.id.timeline);
     	    			
     	    			for (int i = 0; i < qtyOfTweets; i++) {
-    	    				TextView tweet_username = (TextView) TimelineService.ACTIVIDAD.findViewById(R.id.tweet_username);
-    	    				TextView tweet_text = (TextView) TimelineService.ACTIVIDAD.findViewById(R.id.tweet_text);
-    	    				ImageView tweet_user_image = (ImageView) TimelineService.ACTIVIDAD.findViewById(R.id.tweet_user_image);
+    	    				View inflatedView = View.inflate(TimelineService.ACTIVIDAD, R.layout.status, null);
+    	    				 
+    	    				TextView tweet_username = (TextView) inflatedView.findViewById(R.id.tweet_username);
+    	    				TextView tweet_text = (TextView) inflatedView.findViewById(R.id.tweet_text);
+    	    				ImageView tweet_user_image = (ImageView) inflatedView.findViewById(R.id.tweet_user_image);
     	    			
     	    				String rawJson = jsonArray.getString(i);
     	    				Status status = TwitterUtils.getStatusFromJSON(rawJson);
@@ -147,11 +145,7 @@ public class TimelineService extends Service {
     	    				tweet_username.setText(status.getUser().getName());
     	    				tweet_text.setText(status.getText());
     	    				
-    	    				scroll.addView(tweet_username);
-    	    				scroll.addView(tweet_text);
-    	    				
-    	    				usernames[i] = tweet_username;
-    	    				tweet[i] = tweet_text;
+    	    				scroll.addView(inflatedView);
     	    			}
     	    			
     	    		}catch(Exception e){
