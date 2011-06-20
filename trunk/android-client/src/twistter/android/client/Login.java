@@ -54,7 +54,7 @@ public class Login extends Activity {
 
             	String response = null;
             	try {
-            	    response = TwistterHttpClient.executeHttpPost("http://127.0.0.1:8080/Server/LoginServlet", postParameters);
+            	    response = TwistterHttpClient.executeHttpPost("http://192.168.0.4:8080/TwistterServer/LoginServlet", postParameters);
             		//response = "true";
             	} catch (Exception e) {
             	    e.printStackTrace();

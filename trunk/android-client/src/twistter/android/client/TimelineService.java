@@ -1,21 +1,27 @@
 package twistter.android.client;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 
 import twistter.android.client.utils.TwitterUtils;
+import twitter4j.ProfileImage;
+import twitter4j.Status;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -109,52 +115,60 @@ public class TimelineService extends Service {
     	postParameters.add(new BasicNameValuePair("method", "getTimeline"));
     	String response = null;
     	try {
-    	    response = TwistterHttpClient.executeHttpPost("http://127.0.0.1:8080/Server/TimelineServlet", postParameters);
-    	    String[] jsonElements = response.split("&&&");
+    	    response = TwistterHttpClient.executeHttpPost("http://192.168.0.4:8080/TwistterServer/TimelineServlet", postParameters);
+    	    Log.i(getClass().getSimpleName(), response);
+    	    final JSONArray jsonArray = new JSONArray(response);
+    	    
+    	    // Reflejamos la tarea en la actividad principal
+    	    
+    	    
+    	    TimelineService.ACTIVIDAD.runOnUiThread(new Runnable(){
+    	    	public void run(){
+    	    		try{
+    	    			
+    	    			final int qtyOfTweets = jsonArray.length(); 
+    	    			final TextView[] usernames = new TextView[qtyOfTweets];
+    	    			final TextView[] tweet = new TextView[qtyOfTweets];
+    	    			ScrollView scroll = (ScrollView) TimelineService.ACTIVIDAD.findViewById(R.id.scroll_view);
+    	    			//LinearLayout linear_layout = new LinearLayout(TimelineService.ACTIVIDAD);
+    	    			//linear_layout.setOrientation(LinearLayout.VERTICAL);
+    	    			//scroll.addView(linear_layout);
+    	    			
+    	    			for (int i = 0; i < qtyOfTweets; i++) {
+    	    				TextView tweet_username = (TextView) TimelineService.ACTIVIDAD.findViewById(R.id.tweet_username);
+    	    				TextView tweet_text = (TextView) TimelineService.ACTIVIDAD.findViewById(R.id.tweet_text);
+    	    				ImageView tweet_user_image = (ImageView) TimelineService.ACTIVIDAD.findViewById(R.id.tweet_user_image);
+    	    			
+    	    				String rawJson = jsonArray.getString(i);
+    	    				Status status = TwitterUtils.getStatusFromJSON(rawJson);
+    	    				
+    	    				Drawable profilePicture = drawable_from_url(status.getUser().getProfileImageURL().toString(), "src");
+    	    				tweet_user_image.setBackgroundDrawable(profilePicture);
+    	    				tweet_username.setText(status.getUser().getName());
+    	    				tweet_text.setText(status.getText());
+    	    				
+    	    				scroll.addView(tweet_username);
+    	    				scroll.addView(tweet_text);
+    	    				
+    	    				usernames[i] = tweet_username;
+    	    				tweet[i] = tweet_text;
+    	    			}
+    	    			
+    	    		}catch(Exception e){
+    	    			e.printStackTrace();
+    	    		}
+    	    		
+    	    	}
+    	    }
+    	    );
     	} catch (Exception e) {
     	    e.printStackTrace();
     	}
     	
-		// Reflejamos la tarea en la actividad principal
-		
-		
-		TimelineService.ACTIVIDAD.runOnUiThread(new Runnable(){
-				public void run(){
-					try{
-					
-					final int N = 25; //Quantity of tweets
-					final TextView[] usernames = new TextView[N];
-					final TextView[] tweet = new TextView[N];
-					ScrollView scroll = (ScrollView) TimelineService.ACTIVIDAD.findViewById(R.id.scroll_view);
-					//LinearLayout linear_layout = new LinearLayout(TimelineService.ACTIVIDAD);
-					//linear_layout.setOrientation(LinearLayout.VERTICAL);
-					//scroll.addView(linear_layout);
-
-					for (int i = 0; i < N; i++) {
-						
-					    TextView tweet_username = (TextView) TimelineService.ACTIVIDAD.findViewById(R.id.tweet_username);
-					    TextView tweet_text = (TextView) TimelineService.ACTIVIDAD.findViewById(R.id.tweet_text);
-
-					    tweet_username.setText("@lucasapaa");
-					    tweet_text.setText("Jivi gay");
-					    //username.setText(utils.getStatusFromJSON(jsonElements[i]).getUser());
-					    //tweet_text.setText(utils.getStatusFromJSON(jsonElements[i]).getText());
-					    
-					    scroll.addView(tweet_username);
-					    scroll.addView(tweet_text);
+	}
 	
-					    
-					    usernames[i] = tweet_username;
-					    tweet[i] = tweet_text;
-					}
-
-					}catch(Exception e){
-						e.printStackTrace();
-					}
-				
-				}
-			}
-		);
+	android.graphics.drawable.Drawable drawable_from_url(String url, String src_name) throws java.net.MalformedURLException, java.io.IOException {
+	    return android.graphics.drawable.Drawable.createFromStream(((java.io.InputStream)new java.net.URL(url).getContent()), src_name);
 	}
 }
 
