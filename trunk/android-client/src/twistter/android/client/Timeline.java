@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public class Timeline extends Activity{
 	
-	
+	Intent timelineService;
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +26,7 @@ public class Timeline extends Activity{
 
 	    try{
 			Log.i(getClass().getSimpleName(), "Iniciando servicio desde el login...");
-		    Intent timelineService = new Intent(this, TimelineService.class);
+		    timelineService = new Intent(this, TimelineService.class);
 
 		    if(startService(timelineService)==null){
                 this.notificar("No se ha podido iniciar el servicio");
@@ -48,5 +48,10 @@ public class Timeline extends Activity{
         Toast.makeText(getApplicationContext(),cadena,Toast.LENGTH_SHORT).show();
 
 	}
+    
+    public void onDestroy(){
+    	super.onDestroy();
+    	stopService(timelineService);
+    }
 
 }

@@ -116,7 +116,7 @@ public class TimelineService extends Service {
     	postParameters.add(new BasicNameValuePair("method", "getTimeline"));
     	String response = null;
     	try {
-    	    response = TwistterHttpClient.executeHttpPost("http://192.168.0.4:8080/TwistterServer/TimelineServlet", postParameters);
+    	    response = TwistterHttpClient.executeHttpPost("http://172.20.18.183:8080/TwistterServer/TimelineServlet", postParameters);
     	    Log.i(getClass().getSimpleName(), response);
     	    final JSONArray jsonArray = new JSONArray(response);
     	    
@@ -140,8 +140,12 @@ public class TimelineService extends Service {
     	    				String rawJson = jsonArray.getString(i);
     	    				Status status = TwitterUtils.getStatusFromJSON(rawJson);
     	    				
-    	    				Drawable profilePicture = drawable_from_url(status.getUser().getProfileImageURL().toString(), "src");
-    	    				tweet_user_image.setBackgroundDrawable(profilePicture);
+    	    				try{
+    	    					Drawable profilePicture = drawable_from_url(status.getUser().getProfileImageURL().toString(), "src");
+    	    					tweet_user_image.setBackgroundDrawable(profilePicture);    	    					
+    	    				}catch (Exception e) {
+    	    					Log.i(getClass().getSimpleName(), "No se pudo cargar la imagen");
+							}
     	    				tweet_username.setText(status.getUser().getName());
     	    				tweet_text.setText(status.getText());
     	    				
