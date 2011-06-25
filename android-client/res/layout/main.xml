@@ -22,11 +22,6 @@
 	<Button android:layout_width="144px" android:text="Login"
 		android:id="@+id/button_login" android:layout_height="wrap_content"
 		android:layout_x="86dip" android:layout_y="338dip"></Button>
-	<TextView android:id="@+id/textview_error"
-		android:layout_width="fill_parent" android:layout_height="40dip"
-		android:textSize="7pt" android:layout_alignParentLeft="true"
-		android:layout_below="@id/button_login" android:layout_marginRight="9dip"
-		android:layout_marginTop="15dip" android:layout_marginLeft="15dip"
-		android:textColor="#AA0000" android:text="" />
+	
 	<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Save Password" android:id="@+id/savepass" android:layout_x="93dip" android:layout_y="377dip"></CheckBox>
 </AbsoluteLayout>
