@@ -1,4 +1,4 @@
-package twistter.android.client;
+package twistter.android.client.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -18,10 +19,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
-public class TwistterHttpClient {
+public class MyHttpClient {
 	
     public static final int HTTP_TIMEOUT = 30 * 1000; // milliseconds
     private static HttpClient mHttpClient;
+    
     private static HttpClient getHttpClient() {
         if (mHttpClient == null) {
             mHttpClient = new DefaultHttpClient();
@@ -33,7 +35,7 @@ public class TwistterHttpClient {
         return mHttpClient;
     }
 
-    public static String executeHttpPost(String url, ArrayList<NameValuePair> postParameters) {
+    public static String executeHttpPost(String url, ArrayList<NameValuePair> postParameters) throws ClientProtocolException, IOException {
         BufferedReader in = null;
         try {
             HttpClient client = getHttpClient();
@@ -53,10 +55,10 @@ public class TwistterHttpClient {
 
             String result = sb.toString();
             return result;
-        } catch (Exception e) {
+        } catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
+		}finally {
             if (in != null) {
                 try {
                     in.close();
