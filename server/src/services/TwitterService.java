@@ -40,10 +40,12 @@ public class TwitterService {
 	}
 	
 	//The request token passed here must be the one used to get the authorization URL
-	public void persistAccessToken(String userId, String requestToken, String pin) throws TwitterException{
-		AccessToken accessToken = myTwitter.getOAuthAccessToken(requestToken, pin);
-		myTwitter.setOAuthAccessToken(accessToken);		
-		accessTokenDAO.persist(accessToken, userId); 		
+	public void persistAccessToken(AccessToken accessToken) throws TwitterException{
+		//TODO ver como se resuelve
+		myTwitter.setOAuthAccessToken(accessToken);	
+		User user = myTwitter.showUser(accessToken.getUserId());
+		System.out.println(user.getName());
+		accessTokenDAO.persist(accessToken, user.getScreenName()); 		
 	}
 	
 	public void useAccessToken(String userId){
@@ -57,6 +59,7 @@ public class TwitterService {
 	
 	public List<String> getJSONHomeTimeline() throws TwitterException, JSONException{
 		List<Status> timeline = myTwitter.getHomeTimeline();
+	
 		List<String> jsonTimeline = new ArrayList<String>();
 		
 		for (Status status : timeline) {

@@ -46,14 +46,5 @@ public class TimelineServlet extends GenericServlet {
 			}	
 		}
 	}
-	
-	private String makeStringTimelineForResponse(List<String> jsonTimeline) {
-		StringBuffer buffer = new StringBuffer();
-		for(int i = 0; i < jsonTimeline.size()-1; i++) {
-			buffer.append(jsonTimeline.get(i));
-			buffer.append("&&&");
-		}
-		return buffer.toString();
-	}
 
 }
