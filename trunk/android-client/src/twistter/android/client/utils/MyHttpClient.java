@@ -1,8 +1,13 @@
 package twistter.android.client.utils;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -15,9 +20,14 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.params.ConnManagerParams;
+import org.apache.http.entity.InputStreamEntity;
+import org.apache.http.entity.SerializableEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+
+import android.content.Entity;
+
 
 public class MyHttpClient {
 	
@@ -68,6 +78,21 @@ public class MyHttpClient {
             }
         }
 		return null;
+    }
+    
+    public static void sendObjectToServer(String url, Serializable object){
+    	try {
+    	    HttpClient httpclient = new DefaultHttpClient();
+
+    	    HttpPost httppost = new HttpPost(url);
+    	    SerializableEntity reqEntity = new SerializableEntity(object, true);
+    	    reqEntity.setContentType("binary/octet-stream");
+    	    httppost.setEntity(reqEntity);
+    	    httpclient.execute(httppost);
+    	} catch (Exception e) {
+    	    e.printStackTrace();
+    	}
+		
     }
 
     public static String executeHttpGet(String url) throws Exception {

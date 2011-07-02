@@ -6,10 +6,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import twistter.android.client.R;
-import twistter.android.client.R.id;
-import twistter.android.client.R.layout;
 import twistter.android.client.utils.MyHttpClient;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,14 +17,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-
-
 public class LoginActivity extends Activity {
-    EditText un,pw;
+   
+	private String LOGIN_SERVLET_URL; 
+	EditText un,pw;
     Button ok;
+    Button register;
     ImageView logo;
     CheckBox savepass;
     
@@ -43,8 +40,12 @@ public class LoginActivity extends Activity {
         un=(EditText)findViewById(R.id.edittext_username);
         pw=(EditText)findViewById(R.id.edittext_password);
         ok=(Button)findViewById(R.id.button_login);
+        register = (Button) findViewById(R.id.button_register);
         logo = (ImageView) findViewById(R.id.logo);
         savepass = (CheckBox) findViewById(R.id.savepass);
+        
+        LOGIN_SERVLET_URL = "http://" + getString(R.string.ServerIP) + ":" 
+    	+ getString(R.string.ServerPort) + "/" + getString(R.string.ServerRootName) + "/" + getString(R.string.LoginServlet);
 
         ok.setOnClickListener(new View.OnClickListener() {
 
@@ -57,10 +58,8 @@ public class LoginActivity extends Activity {
 
             	String response = null;
             	try {
-            	    response = MyHttpClient.executeHttpPost("http://172.20.18.183:8080/TwistterServer/LoginServlet", postParameters);
-            		//response = "true";
-            	    if(response.contains((String)"true")){ 
-                		
+            	    response = MyHttpClient.executeHttpPost(LOGIN_SERVLET_URL, postParameters);
+            	    if(response != null && response.contains((String)"true")){ 
                 		if(savepass.isChecked()){
                             getSharedPreferences(PREFS_NAME,MODE_PRIVATE)
                                 .edit()
@@ -70,22 +69,27 @@ public class LoginActivity extends Activity {
                             Toast.makeText(getApplicationContext(),"Saved Successfully",Toast.LENGTH_LONG).show();
                             //Ver si sacamos el toast
                 		}
-                	    	Intent myIntent = new Intent(LoginActivity.this, TimelineActivity.class);
-                	    	LoginActivity.this.startActivity(myIntent);
-                            Toast.makeText(getApplicationContext(),"Logged in Successfully",Toast.LENGTH_SHORT).show();
-
+	        	    	Intent myIntent = new Intent(LoginActivity.this, TimelineActivity.class);
+	        	    	LoginActivity.this.startActivity(myIntent);
+	                    Toast.makeText(getApplicationContext(),"Logged in Successfully",Toast.LENGTH_SHORT).show();
                 	}else{
                         Toast.makeText(getApplicationContext(),"Incorrect Username or Password",Toast.LENGTH_LONG).show();
 
                 	}
             	} catch (Exception e) {
-            		Toast.makeText(getApplicationContext(),"Couldn't connect to server. Try again later.",Toast.LENGTH_LONG).show();
+            		Toast.makeText(getApplicationContext(),"Couldn't connect to server: "
+            				+ LOGIN_SERVLET_URL + ". Try again later.",Toast.LENGTH_LONG).show();
             	}   	
-            	
-            	
             } 
+        });
+        
+        register.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent myIntent = new Intent(LoginActivity.this, OAuthRegister.class);
+    	    	LoginActivity.this.startActivity(myIntent);
+			}
         	
-            
         });
         
         SharedPreferences pref = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);   
