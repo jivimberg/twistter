@@ -2,4 +2,10 @@
 <resources>
     <string name="hello">Hello World, TwistterActivity!</string>
     <string name="app_name">Twistter Android Application</string>
+<string name="ServerIP">192.168.0.4</string>
+<string name="ServerPort">8080</string>
+<string name="ServerRootName">TwistterServer</string>
+<string name="TimelineServlet">TimelineServlet</string>
+<string name="LoginServlet">LoginServlet</string>
+<string name="RegisterServlet">RegisterServlet</string>
 </resources>

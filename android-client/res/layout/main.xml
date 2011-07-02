@@ -19,9 +19,14 @@
 	<TextView android:layout_width="wrap_content" android:text="Contraseña"
 		android:id="@+id/viewtext_password" android:layout_height="19px"
 		android:layout_x="35dip" android:layout_y="299dip" ></TextView>
-	<Button android:layout_width="144px" android:text="Login"
-		android:id="@+id/button_login" android:layout_height="wrap_content"
-		android:layout_x="86dip" android:layout_y="338dip"></Button>
 	
-	<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Save Password" android:id="@+id/savepass" android:layout_x="93dip" android:layout_y="377dip"></CheckBox>
+	
+	
+
+
+<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/savepass" android:text="Save Password" android:layout_x="92dip" android:layout_y="382dip"></CheckBox>
+
+
+<Button android:layout_width="144px" android:id="@+id/button_login" android:text="Login" android:layout_height="wrap_content" android:layout_x="73dip" android:layout_y="341dip"></Button>
+<Button android:layout_width="wrap_content" android:id="@+id/button_register" android:text="Register" android:layout_height="wrap_content" android:layout_x="234dip" android:layout_y="341dip"></Button>
 </AbsoluteLayout>
