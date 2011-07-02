@@ -14,6 +14,7 @@ public class FileUtils {
 		FileOutputStream fout;
 		ObjectOutputStream objectOutputStream = null;
 		try {
+			System.out.println("Writing File");
 			fout = new FileOutputStream(fileName);
 			objectOutputStream = new ObjectOutputStream(fout);
 			objectOutputStream.writeObject(object);
