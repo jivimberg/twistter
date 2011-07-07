@@ -50,8 +50,10 @@ public class MyHttpClient {
         try {
             HttpClient client = getHttpClient();
             HttpPost request = new HttpPost(url);
-            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
-            request.setEntity(formEntity);
+            if(postParameters != null){
+            	UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            	request.setEntity(formEntity);            	
+            }
             HttpResponse response = client.execute(request);
             in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
