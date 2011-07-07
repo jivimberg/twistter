@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-android:id="@+id/scroll_view"
-android:layout_width="fill_parent"
-android:layout_height="fill_parent"
-xmlns:android="http://schemas.android.com/apk/res/android"
->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/timeline"
 	android:layout_width="fill_parent" android:layout_height="wrap_content"
 	android:orientation="vertical">
+	
+	<ScrollView
+	android:id="@+id/scroll_view"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_weight="1"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+id/timeline"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:orientation="vertical">
+		</LinearLayout>
+	</ScrollView>
+	
+	 <twistter.android.client.layout.MenuBar 
+	 	android:layout_alignParentBottom="true"
+		android:layout_width="fill_parent" 
+        android:layout_height="wrap_content" 
+        android:layout_gravity="bottom"
+
+        android:paddingTop="8dip"
+        android:gravity="center_horizontal"
+        
+        android:background="#AA000000"> 
+	</twistter.android.client.layout.MenuBar>  
 </LinearLayout>
-</ScrollView>
