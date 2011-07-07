@@ -45,4 +45,16 @@
 		<servlet-name>RegisterServlet</servlet-name>
 		<url-pattern>/RegisterServlet</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<description>UpdateStatusServlet</description>
+		<display-name>UpdateStatusServlet</display-name>
+		<servlet-name>UpdateStatusServlet</servlet-name>
+		<servlet-class>servlet.UpdateStatusServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>UpdateStatusServlet</servlet-name>
+		<url-pattern>/UpdateStatusServlet</url-pattern>
+	</servlet-mapping>
 </web-app>

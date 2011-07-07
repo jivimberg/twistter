@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
+import java.util.Scanner;
 
 import twitter4j.Status;
 import twitter4j.Twitter;
@@ -26,7 +27,7 @@ public class MyTwitter {
 	public void authorizeApp(){
 		final TwitterFactory myTwitterFactory = new TwitterFactory();
 		myTwitter = myTwitterFactory.getInstance();
-		myTwitter.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
+//		myTwitter.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
 		try {
 			//Consumer request Token
 			requestToken = myTwitter.getOAuthRequestToken();
@@ -145,18 +146,18 @@ public class MyTwitter {
 	public static void main(String args[]){
 		MyTwitter myTwitter = new MyTwitter();
 		
-//		myTwitter.authorizeApp();
-//		
-//		System.out.println("Please insert your pin");
-//		Scanner in = new Scanner(System.in);
-//
-//       // Reads a single line from the console 
-//       // and stores into name variable
-//       String pin = in.nextLine();
-//	       
-//       myTwitter.createAccessToken(pin);
+		myTwitter.authorizeApp();
 		
-		myTwitter.useAccessToken("accessToken.dat");
+		System.out.println("Please insert your pin");
+		Scanner in = new Scanner(System.in);
+
+       // Reads a single line from the console 
+       // and stores into name variable
+       String pin = in.nextLine();
+	       
+       myTwitter.createAccessToken(pin);
+		
+//		myTwitter.useAccessToken("accessToken.dat");
        
 	}
 

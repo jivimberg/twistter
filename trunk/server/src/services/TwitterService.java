@@ -70,6 +70,7 @@ public class TwitterService {
 	}
 	
 	public void updateStatus(String msg) throws TwitterException{
+		System.out.println(msg);
 		myTwitter.updateStatus(msg);
 	}
 	
