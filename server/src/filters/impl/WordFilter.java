@@ -6,6 +6,11 @@ import filters.TimelineFilter;
 public class WordFilter extends TimelineFilter{
 	
 	private String filterWord;
+	
+	public WordFilter(String filterWord) {
+		super();
+		this.filterWord = filterWord;
+	}
 
 	@Override
 	protected boolean accept(Status status) {
