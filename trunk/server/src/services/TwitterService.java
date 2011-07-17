@@ -69,6 +69,16 @@ public class TwitterService {
 		return jsonTimeline;
 	}
 	
+	public List<String> getJSON(List<Status> timeline) throws TwitterException, JSONException{
+		List<String> jsonTimeline = new ArrayList<String>();
+		
+		for (Status status : timeline) {
+			jsonTimeline.add(JSONUtils.writeStatusToJSON(status));
+		}
+		
+		return jsonTimeline;
+	}
+	
 	public void updateStatus(String msg) throws TwitterException{
 		System.out.println(msg);
 		myTwitter.updateStatus(msg);

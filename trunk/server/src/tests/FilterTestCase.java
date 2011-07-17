@@ -20,8 +20,7 @@ private TwitterService twitterService;
 		final List<Status> timeline = twitterService.getHomeTimeline();
 		assertEquals("The timeline size is not the expected", 20, timeline.size());
 		
-		final WordFilter wordFilter = new WordFilter();
-		wordFilter.setFilterWord(filteredWord);
+		final WordFilter wordFilter = new WordFilter(filteredWord);
 		
 		final List<Status> filteredTimeline = wordFilter.filter(timeline);
 		assertEquals("The filtered timeline size is not the expected", 19, filteredTimeline.size());

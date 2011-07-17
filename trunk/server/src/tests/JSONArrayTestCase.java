@@ -1,14 +1,14 @@
 package tests;
 
-import java.io.PrintWriter;
 import java.util.List;
+
+import junit.framework.TestCase;
 
 import org.json.JSONArray;
 
 import services.TwitterService;
 import twitter4j.Status;
 import twitter4j.TwitterException;
-import junit.framework.TestCase;
 
 public class JSONArrayTestCase extends TestCase{
 
@@ -21,7 +21,5 @@ public class JSONArrayTestCase extends TestCase{
 		
 		JSONArray jsonArray = new JSONArray(timeline);
 		System.out.println(jsonArray);
-		
-		
 	}
 }
