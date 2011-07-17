@@ -44,7 +44,9 @@ public class TimelineActivity extends Activity{
 				for (View view : statusViews) {
 					scroll.addView(view);
 				}
-	    	}
+				
+				toastNotify(20 - statusViews.size() + " tweets filtrados"); //TODO valor hardcodeado!
+	    	}  
 	    };
 	}
 	
