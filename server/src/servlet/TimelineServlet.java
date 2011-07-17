@@ -39,6 +39,7 @@ public class TimelineServlet extends GenericServlet {
 					
 					List<Status> timeline = twitterService.getHomeTimeline();
 					List<Status> filteredTimeline = filterService.filter(userId, timeline);
+					System.out.println(timeline.size() - filteredTimeline.size() + " tweets filtered");
 					jsonTimeline = twitterService.getJSON(filteredTimeline);
 					
 					JSONArray jsonArray = new JSONArray(jsonTimeline);
