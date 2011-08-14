@@ -1,17 +1,12 @@
 package servlet;
 
-import java.io.EOFException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import services.TwitterService;
-import twitter4j.TwitterException;
-import twitter4j.auth.AccessToken;
+import services.UserService;
 
 public class LoginServlet extends GenericServlet {
 
@@ -19,8 +14,7 @@ public class LoginServlet extends GenericServlet {
 	private String username;
 	private String password;
 	private HttpSession session;
-
-	private TwitterService service = new TwitterService();
+	private UserService userService = new UserService();
 
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse res) {
@@ -30,7 +24,7 @@ public class LoginServlet extends GenericServlet {
 
 		System.out.println(".Login.");
 		try {
-			if (username.equals("jivimberg") && password.equals("12345")) {
+			if (userService.login("jivimberg", "12345")) {
 				if (session != null) {
 					session.setAttribute("username", username.trim());
 					session.setAttribute("password", password.trim());

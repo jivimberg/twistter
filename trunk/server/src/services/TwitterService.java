@@ -3,6 +3,7 @@ package services;
 import java.util.ArrayList;
 import java.util.List;
 
+import twitter4j.Paging;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -54,11 +55,13 @@ public class TwitterService {
 	}
 
 	public List<Status> getHomeTimeline() throws TwitterException{
-		return myTwitter.getHomeTimeline();
+		final Paging paging = new Paging (1,20);
+		return myTwitter.getHomeTimeline(paging);
 	}
 	
 	public List<String> getJSONHomeTimeline() throws TwitterException, JSONException{
-		List<Status> timeline = myTwitter.getHomeTimeline();
+		final Paging paging = new Paging (1,20);
+		List<Status> timeline = myTwitter.getHomeTimeline(paging);
 	
 		List<String> jsonTimeline = new ArrayList<String>();
 		
