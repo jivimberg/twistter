@@ -13,7 +13,7 @@ public class MockFilterDao implements FilterDAO{
 	public List<TimelineFilter> getFiltersFromUser(String username) {
 		List<TimelineFilter> filters = new ArrayList<TimelineFilter>();
 		
-		TimelineFilter wordFilter = new WordFilter("contento");
+		TimelineFilter wordFilter = new WordFilter("Estudiando");
 		filters.add(wordFilter);
 		
 		return filters;

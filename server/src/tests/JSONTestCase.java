@@ -3,7 +3,6 @@ package tests;
 import java.util.List;
 
 import junit.framework.TestCase;
-
 import services.TwitterService;
 import twitter4j.Status;
 import twitter4j.TwitterException;
