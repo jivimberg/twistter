@@ -3,6 +3,8 @@ package services;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.istack.internal.NotNull;
+
 import twitter4j.Paging;
 import twitter4j.Status;
 import twitter4j.Twitter;
@@ -19,19 +21,18 @@ public class TwitterService {
 	
 	private Twitter myTwitter;
 	private AccessTokenDAO accessTokenDAO;
+	private static TwitterService singleInstance;
 	
-	public TwitterService(){
-		initialize();
-	}
-	
-	public TwitterService(String userId){
-		initialize();
-		useAccessToken(userId);
-	}
-	
-	public void initialize(){
+	private TwitterService(){
 		myTwitter = MyTwitterFactory.createAuthenticatedService();
 		accessTokenDAO = new FileAccessTokenDAO();
+	}
+	
+	public static TwitterService getInstance(){
+		if(singleInstance == null){
+			singleInstance = new TwitterService();
+		}
+		return singleInstance;
 	}
 	
 	public RequestToken getRequestToken() throws TwitterException{
@@ -43,28 +44,31 @@ public class TwitterService {
 	//The request token passed here must be the one used to get the authorization URL
 	public void persistAccessToken(AccessToken accessToken) throws TwitterException{
 		//TODO ver como se resuelve
-		myTwitter.setOAuthAccessToken(accessToken);	
-		User user = myTwitter.showUser(accessToken.getUserId());
-		System.out.println(user.getName());
-		accessTokenDAO.persist(accessToken, user.getScreenName()); 		
+		final User user = myTwitter.showUser(accessToken.getUserId());
+		final String userId = user.getScreenName();
+		accessTokenDAO.persist(accessToken, userId); 
+		useAccessToken(userId);
 	}
 	
-	public void useAccessToken(String userId){
-			AccessToken accessToken = accessTokenDAO.getAccessToken(userId);
+	private void useAccessToken(String userId){
+			final AccessToken accessToken = accessTokenDAO.getAccessToken(userId);
 			myTwitter.setOAuthAccessToken(accessToken);
 	}
 
-	public List<Status> getHomeTimeline() throws TwitterException{
+	public List<Status> getHomeTimeline(@NotNull String userId) throws TwitterException{
+		useAccessToken(userId);
+		
 		final Paging paging = new Paging (1,20);
 		return myTwitter.getHomeTimeline(paging);
 	}
 	
-	public List<String> getJSONHomeTimeline() throws TwitterException, JSONException{
+	public List<String> getJSONHomeTimeline(@NotNull String userId) throws TwitterException, JSONException{
+		useAccessToken(userId);
+		
 		final Paging paging = new Paging (1,20);
 		List<Status> timeline = myTwitter.getHomeTimeline(paging);
 	
 		List<String> jsonTimeline = new ArrayList<String>();
-		
 		for (Status status : timeline) {
 			jsonTimeline.add(JSONUtils.writeStatusToJSON(status));
 		}
@@ -72,22 +76,14 @@ public class TwitterService {
 		return jsonTimeline;
 	}
 	
-	public List<String> getJSON(List<Status> timeline) throws TwitterException, JSONException{
-		List<String> jsonTimeline = new ArrayList<String>();
-		
-		for (Status status : timeline) {
-			jsonTimeline.add(JSONUtils.writeStatusToJSON(status));
-		}
-		
-		return jsonTimeline;
-	}
-	
-	public void updateStatus(String msg) throws TwitterException{
+	public void updateStatus(@NotNull String userId, @NotNull String msg) throws TwitterException{
+		useAccessToken(userId);
 		System.out.println(msg);
 		myTwitter.updateStatus(msg);
 	}
 	
-	public String getName() throws IllegalStateException, TwitterException{
+	public String getName(@NotNull String userId) throws IllegalStateException, TwitterException{
+		useAccessToken(userId);
 		User user = myTwitter.showUser(myTwitter.getId());
 		return user.getName();
 	}

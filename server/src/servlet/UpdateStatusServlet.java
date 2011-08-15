@@ -14,7 +14,7 @@ public class UpdateStatusServlet extends GenericServlet {
 	private static final long serialVersionUID = 4003175649047885489L;
 	private HttpSession session;
 
-	private TwitterService service = new TwitterService();
+	private TwitterService service = TwitterService.getInstance();
 
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse res) {
@@ -23,9 +23,8 @@ public class UpdateStatusServlet extends GenericServlet {
 		if ( userId != null) {
 			System.out.println(".updateStatus.");
 			String message = req.getParameter("message");
-			service.useAccessToken(userId);
 			try {
-				service.updateStatus(message);
+				service.updateStatus(message, userId);
 				res.getWriter().write("true");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

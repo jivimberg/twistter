@@ -11,19 +11,15 @@ import twitter4j.json.DataObjectFactory;
 
 public class TwitterServiceTestCase extends TestCase {
 
-	private TwitterService twitterService = new TwitterService();
+	private TwitterService twitterService = TwitterService.getInstance();
 	private final static String userId = "jivimberg";
 	
 	public void testUseAccessToken() throws IllegalStateException, TwitterException{
-		twitterService.useAccessToken(userId);
-		
-		assertEquals("The returned user name is not the expected", "Juan Ignacio Vimberg" , twitterService.getName());
+		assertEquals("The returned user name is not the expected", "Juan Ignacio Vimberg" , twitterService.getName(userId));
 	}
 	
 	public void testGetTimeline() throws TwitterException{
-		twitterService.useAccessToken(userId);
-		
-		final List<Status> timeline = twitterService.getHomeTimeline();
+		final List<Status> timeline = twitterService.getHomeTimeline(userId);
 		assertFalse("The timeline is empty", timeline.isEmpty());
 		assertTrue("The timeline size is not the expected", 20 >= timeline.size());
 		
@@ -36,9 +32,7 @@ public class TwitterServiceTestCase extends TestCase {
 	}
 	
 	public void testGetJSONTimeline() throws TwitterException, JSONException{
-		twitterService.useAccessToken(userId);
-		
-		final List<String> timeline = twitterService.getJSONHomeTimeline();
+		final List<String> timeline = twitterService.getJSONHomeTimeline(userId);
 		assertFalse("The timeline is empty", timeline.isEmpty());
 		assertTrue("The timeline size is not the expected", 20 >= timeline.size());
 		
