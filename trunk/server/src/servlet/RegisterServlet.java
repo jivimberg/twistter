@@ -16,8 +16,7 @@ public class RegisterServlet extends GenericServlet {
 
 	private static final long serialVersionUID = 4003175649047885489L;
 
-	private TwitterService service = new TwitterService();
-
+	private TwitterService service = TwitterService.getInstance();
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse res) {
 		System.out.println(".register.");

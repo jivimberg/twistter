@@ -13,14 +13,15 @@ import twitter4j.Status;
 import twitter4j.TwitterException;
 import twitter4j.internal.org.json.JSONArray;
 import twitter4j.internal.org.json.JSONException;
+import utils.JSONUtils;
 
 public class TimelineServlet extends GenericServlet {
 
 	private static final long serialVersionUID = 3313648362012066879L;
 	private HttpSession session;
 	private String method;
-	private TwitterService twitterService = new TwitterService();
-	private FilterService filterService = new FilterService();
+	private TwitterService twitterService = TwitterService.getInstance();
+	private FilterService filterService = FilterService.getInstance();
 	
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse res) {
@@ -32,15 +33,10 @@ public class TimelineServlet extends GenericServlet {
 			System.out.println("."+method+".");
 			if(method.equals("getTimeline")) {
 				try {
-					twitterService.useAccessToken(userId);
-					
-					//backup
-//					jsonTimeline = service.getJSONHomeTimeline();
-					
-					List<Status> timeline = twitterService.getHomeTimeline();
+					List<Status> timeline = twitterService.getHomeTimeline(userId);
 					List<Status> filteredTimeline = filterService.filter(userId, timeline);
 					System.out.println(timeline.size() - filteredTimeline.size() + " tweets filtered");
-					jsonTimeline = twitterService.getJSON(filteredTimeline);
+					jsonTimeline = JSONUtils.getJSON(filteredTimeline);
 					
 					JSONArray jsonArray = new JSONArray(jsonTimeline);
 					res.getWriter().write(jsonArray.toString());

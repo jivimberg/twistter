@@ -9,7 +9,12 @@ import filters.TimelineFilter;
 
 public class FilterService {
 	
-	FilterDAO filterDao = new MockFilterDao();
+	private static FilterService singleInstance;
+	private FilterDAO filterDao = new MockFilterDao();
+	
+	private FilterService(){
+		
+	}
 	
 	public List<Status> filter(String username, List<Status> timeline){
 		final List<TimelineFilter> filters = filterDao.getFiltersFromUser(username);
@@ -20,6 +25,13 @@ public class FilterService {
 		}
 		
 		return filteredTimeline;
+	}
+	
+	public static FilterService getInstance(){
+		if(singleInstance == null){
+			singleInstance = new FilterService();
+		}
+		return singleInstance;
 	}
 
 }
