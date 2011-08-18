@@ -12,6 +12,6 @@ public class UserServiceTestCase extends TestCase {
 		assertFalse("Login should have failed, wrong username", userService.login("0000", "12345"));
 		assertFalse("Login should have failed, wrong password", userService.login("jivimberg", "0000"));
 		assertFalse("Login should have failed, null password", userService.login("jivimberg", null));
-		assertFalse("Login should have failed, null username", userService.login("jivimberg", null));
+		assertFalse("Login should have failed, null username", userService.login(null, "12345"));
 	}
 }
