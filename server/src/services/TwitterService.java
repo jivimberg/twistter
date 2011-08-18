@@ -76,7 +76,7 @@ public class TwitterService {
 		return jsonTimeline;
 	}
 	
-	public void updateStatus(@NotNull String userId, @NotNull String msg) throws TwitterException{
+	public void updateStatus(@NotNull String msg, @NotNull String userId) throws TwitterException{
 		useAccessToken(userId);
 		System.out.println(msg);
 		myTwitter.updateStatus(msg);

@@ -24,7 +24,7 @@ public class LoginServlet extends GenericServlet {
 
 		System.out.println(".Login.");
 		try {
-			if (userService.login("jivimberg", "12345")) {
+			if (userService.login(username, password)) {
 				if (session != null) {
 					session.setAttribute("username", username.trim());
 					session.setAttribute("password", password.trim());
