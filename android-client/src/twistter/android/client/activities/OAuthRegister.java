@@ -1,12 +1,5 @@
 package twistter.android.client.activities;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.message.BasicNameValuePair;
-
 import twistter.android.client.R;
 import twistter.android.client.utils.MyHttpClient;
 import twitter4j.Twitter;
