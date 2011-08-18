@@ -1,22 +1,17 @@
 package twistter.android.client.activities;
 
 
-import java.util.Iterator;
 import java.util.List;
 
 import twistter.android.client.R;
 import twistter.android.client.services.TimelineService;
-import twistter.android.client.utils.TwitterUtils;
-import twitter4j.Status;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,9 +37,11 @@ public class TimelineActivity extends Activity{
 
 				// Agregar los tweets traídos
 				for (View view : statusViews) {
-					scroll.addView(view);
+					scroll.addView(view, 0);
 				}
 				
+				TextView filterTweetsCounter = (TextView)  findViewById(R.id.filtered_tweets_counter);
+				filterTweetsCounter.setText(20 - statusViews.size() + " filtered");
 				toastNotify(20 - statusViews.size() + " tweets filtrados"); //TODO valor hardcodeado!
 	    	}  
 	    };
