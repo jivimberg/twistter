@@ -2,17 +2,21 @@ package services;
 
 import com.sun.istack.internal.NotNull;
 
+import daos.AccessTokenDAO;
+import daos.impl.FileAccessTokenDAO;
+
 
 public class UserService {
 
 	public static UserService singleInstance;
+	public static AccessTokenDAO accessToken;
 	
 	private UserService() {
-		// TODO Auto-generated constructor stub
+		accessToken = new FileAccessTokenDAO();
 	}
 	
 	public boolean login(@NotNull String username,@NotNull String password){
-		return (username != null && username.equals("jivimberg"));
+		return (username != null && accessToken.existAccessToken(username));
 	}
 	
 	public static UserService getInstance(){
