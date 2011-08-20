@@ -14,7 +14,7 @@ public class LoginServlet extends GenericServlet {
 	private String username;
 	private String password;
 	private HttpSession session;
-	private UserService userService = new UserService();
+	private UserService userService = UserService.getInstance();
 
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse res) {
