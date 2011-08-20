@@ -1,5 +1,7 @@
 package daos.impl;
 
+import java.io.File;
+
 import twitter4j.auth.AccessToken;
 import utils.FileUtils;
 import daos.AccessTokenDAO;
@@ -20,6 +22,11 @@ public class FileAccessTokenDAO implements AccessTokenDAO{
 	
 	private String buildFileName(String userId) {
 		return userId + EXTENSION;
+	}
+
+	@Override
+	public boolean existAccessToken(String userId) {
+		return new File(buildFileName(userId)).exists();
 	}
 	
 

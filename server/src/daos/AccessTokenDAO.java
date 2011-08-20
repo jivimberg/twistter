@@ -7,5 +7,7 @@ public interface AccessTokenDAO {
 	void persist(AccessToken accessToken, String userId);
 
 	AccessToken getAccessToken(String userId);
+	
+	boolean existAccessToken(String userId);
 
 }
