@@ -72,8 +72,8 @@ public class TimelineActivity extends Activity{
         Toast.makeText(getApplicationContext(),string,Toast.LENGTH_SHORT).show();
 	}
     
-    public void onDestroy(){
-    	super.onDestroy();
+    public void onStop(){
+    	super.onStop();
     	stopService(timelineService);
     }
 
