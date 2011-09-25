@@ -32,6 +32,7 @@ public class TimelineService extends Service {
 	public static TimelineActivity ACTIVIDAD;
 	private Timer timer = null;
 	private Handler uiHandler;
+	private static JSONArray lastJsonArray;
 
 	public static void establecerActividadPrincipal(TimelineActivity actividad){
 		TimelineService.ACTIVIDAD=actividad;
@@ -44,7 +45,7 @@ public class TimelineService extends Service {
 		Log.i(getClass().getSimpleName(), "Servicio iniciado");
 		TIMELINE_SERVLET_URL = "http://" + getString(R.string.ServerIP) + ":" 
 		+ getString(R.string.ServerPort) + "/" + getString(R.string.ServerRootName) + "/" + getString(R.string.TimelineServlet);
-		
+		lastJsonArray = new JSONArray();
 	}
 
 	public void onDestroy()
@@ -98,8 +99,24 @@ public class TimelineService extends Service {
 			Log.i(getClass().getSimpleName(), e.getMessage());
 		}
 	}
+	
+	public boolean isCached(String rawJson){
+		
+		for(int i=0; i<lastJsonArray.length();i++){
+			try {
+				if(rawJson.equals(lastJsonArray.getString(i))){
+					return true;
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}return false;
+		
+	}
+	
 
 	private void ejecutarTarea(){
+		
 		Log.i(getClass().getSimpleName(), "Trayendo timeline...");
 
 		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
@@ -108,38 +125,40 @@ public class TimelineService extends Service {
     	String response = null;
     	try {
     	    response = MyHttpClient.executeHttpPost(TIMELINE_SERVLET_URL, postParameters);
-    	    final JSONArray jsonArray = new JSONArray(response);
-    	    
-    	    //Parseamos los tweets  y armamos los elementos de la vista
-    	    List<View> statusViews = new ArrayList<View>();
-    	    for (int i = 0; i < jsonArray.length(); i++) {
-    	    	View inflatedView = View.inflate(ACTIVIDAD, R.layout.status, null);
-    	    	
-    	    	TextView tweet_username = (TextView) inflatedView.findViewById(R.id.tweet_username);
-    	    	TextView tweet_text = (TextView) inflatedView.findViewById(R.id.tweet_text);
-    	    	ImageView tweet_user_image = (ImageView) inflatedView.findViewById(R.id.tweet_user_image);
-    	    	
-    	    	String rawJson = jsonArray.getString(i);
-    	    	Status status = TwitterUtils.getStatusFromJSON(rawJson);
-    	    	
-    	    	try{
-    	    		Drawable profilePicture = drawable_from_url(status.getUser().getProfileImageURL().toString(), "image" + i);
-    	    		tweet_user_image.setBackgroundDrawable(profilePicture);    	    					
-    	    	}catch (Exception e) {
-    	    		Log.w(getClass().getSimpleName(), "No se pudo cargar la imagen");
+    	    System.out.println(response);
+    	    final JSONArray jsonArray = new JSONArray(response);  	    
+   
+    	    for (int i = 0; i < jsonArray.length(); i++){
+    	    	if(!isCached(jsonArray.getString(i))){
+    	    		View inflatedView = View.inflate(ACTIVIDAD, R.layout.status, null);
+        	    	
+        	    	TextView tweet_username = (TextView) inflatedView.findViewById(R.id.tweet_username);
+        	    	TextView tweet_text = (TextView) inflatedView.findViewById(R.id.tweet_text);
+        	    	
+        	    	
+        	    	String rawJson = jsonArray.getString(i);
+        	    	Status status = TwitterUtils.getStatusFromJSON(rawJson);
+        	    	
+        	    	
+        	    	tweet_username.setText("@"+status.getUser().getScreenName()+" ("+status.getUser().getName()+")");
+        	    	tweet_text.setText(status.getText());
+        	    	
+        	    	// Reflejamos la tarea en la actividad principal
+            	    Message message = new Message();
+            	    ArrayList<Object> arrayMessage = new ArrayList<Object>();
+            	    arrayMessage.add(inflatedView);
+            	    arrayMessage.add(status);
+                    message.obj = arrayMessage;
+                    uiHandler = TimelineService.ACTIVIDAD.getMyHandler();
+                    uiHandler.sendMessage(message);
+                    
+                   
+                    
     	    	}
-    	    	tweet_username.setText(status.getUser().getName());
-    	    	tweet_text.setText(status.getText());
     	    	
-    	    	statusViews.add(inflatedView);
 			}
-    	    
-    	    
-    	    // Reflejamos la tarea en la actividad principal
-    	    Message message = new Message();
-            message.obj = statusViews;
-            uiHandler = TimelineService.ACTIVIDAD.getMyHandler();
-            uiHandler.sendMessage(message);
+    	    lastJsonArray = jsonArray;
+    	               
     	}catch(JSONException e){
     		e.printStackTrace();
     	} catch (Exception e) {
@@ -147,9 +166,7 @@ public class TimelineService extends Service {
 		}
 	}
 	
-	android.graphics.drawable.Drawable drawable_from_url(String url, String src_name) throws java.net.MalformedURLException, java.io.IOException {
-	    return android.graphics.drawable.Drawable.createFromStream(((java.io.InputStream)new java.net.URL(url).getContent()), src_name);
-	}
+	
             
 }
 

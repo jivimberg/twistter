@@ -1,49 +1,68 @@
 package twistter.android.client.activities;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import twistter.android.client.R;
 import twistter.android.client.services.TimelineService;
+import twitter4j.Status;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class TimelineActivity extends Activity{
 	
 	Intent timelineService;
 	private Handler myHandler;
+	private ProgressDialog pd;
+
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.timeline); //Agregar el nuevo activity
         startService();
+        pd = ProgressDialog.show(this, "Twistter", "Loading timeline...");
         
         myHandler = new Handler(){
 			public void handleMessage(Message msg) {
-				List<View> statusViews = (List<View>) msg.obj;
-
+				TimelineService.ACTIVIDAD.dismissProgressLoader();
+				ArrayList<Object> arrayMessage = (ArrayList<Object>) msg.obj;
+				View statusView = (View) arrayMessage.get(0);
+				Status status = (Status) arrayMessage.get(1);
+				
 				LinearLayout scroll = (LinearLayout) findViewById(R.id.timeline);
 
-				// Borrar los tweets antes almacenados
-				scroll.removeAllViews();
+				scroll.addView(statusView,0);
+					
+				ImageView tweet_user_image = (ImageView) statusView.findViewById(R.id.tweet_user_image);
+				 try{
+					//String url = status.getUser().getProfileImageURL().toString();
+					//String hack = url.substring(0,url.length()-11)+"_reasonably_small"+url.substring(url.length()-4,url.length());
 
-				// Agregar los tweets traídos
-				for (View view : statusViews) {
-					scroll.addView(view, 0);
-				}
+
+     	    		//Drawable profilePicture = drawable_from_url(hack, "image");
+     	    		//tweet_user_image.setBackgroundDrawable(profilePicture);    	    					
+     	    	}catch (Exception e) {
+     	    		Log.w(getClass().getSimpleName(), "No se pudo cargar la imagen");
+     	    	}
+				//}
 				
-				TextView filterTweetsCounter = (TextView)  findViewById(R.id.filtered_tweets_counter);
-				filterTweetsCounter.setText(20 - statusViews.size() + " filtered");
-				toastNotify(20 - statusViews.size() + " tweets filtrados"); //TODO valor hardcodeado!
-	    	}  
+				//TextView filterTweetsCounter = (TextView)  findViewById(R.id.filtered_tweets_counter);
+				//filterTweetsCounter.setText(20 - statusViews.size() + " filtered");
+				//toastNotify(20 - statusViews.size() + " tweets filtrados"); //TODO valor hardcodeado!
+	    	
+			
+			}  
 	    };
 	}
 	
@@ -76,8 +95,17 @@ public class TimelineActivity extends Activity{
     	super.onStop();
     	stopService(timelineService);
     }
+     
 
 	public Handler getMyHandler() {
 		return myHandler;
-	} 
+	}
+	
+	public void dismissProgressLoader(){
+		pd.dismiss();
+	}
+	
+	public android.graphics.drawable.Drawable drawable_from_url(String url, String src_name) throws java.net.MalformedURLException, java.io.IOException {
+	    return android.graphics.drawable.Drawable.createFromStream(((java.io.InputStream)new java.net.URL(url).getContent()), src_name);
+	}
 }
