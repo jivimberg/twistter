@@ -39,6 +39,7 @@ public class TimelineServlet extends GenericServlet {
 					jsonTimeline = JSONUtils.getJSON(filteredTimeline);
 					
 					JSONArray jsonArray = new JSONArray(jsonTimeline);
+					
 					res.getWriter().write(jsonArray.toString());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

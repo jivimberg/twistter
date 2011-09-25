@@ -8,6 +8,7 @@ import org.apache.http.message.BasicNameValuePair;
 import twistter.android.client.R;
 import twistter.android.client.utils.MyHttpClient;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +39,8 @@ public class UpdateStatusActivity extends Activity {
             	    response = MyHttpClient.executeHttpPost(UPDATE_STATUS__SERVLET_URL, postParameters);
             	    if(response != null && response.contains((String)"true")){ 
                             Toast.makeText(getApplicationContext(),"Message updated successfully",Toast.LENGTH_LONG).show();
+                            Intent myIntent = new Intent(UpdateStatusActivity.this, TimelineActivity.class);
+                            UpdateStatusActivity.this.startActivity(myIntent);
                 		}
             	} catch (Exception e) {
             		Toast.makeText(getApplicationContext(),"Couldn't connect to server: "
