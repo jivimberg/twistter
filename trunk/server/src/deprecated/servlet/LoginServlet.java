@@ -1,4 +1,4 @@
-package servlet;
+package deprecated.servlet;
 
 import java.io.IOException;
 
@@ -24,7 +24,7 @@ public class LoginServlet extends GenericServlet {
 
 		System.out.println(".Login.");
 		try {
-			if (userService.login(username, password)) {
+			if (userService.isRegistered(username, password)) {
 				if (session != null) {
 					session.setAttribute("username", username.trim());
 					session.setAttribute("password", password.trim());

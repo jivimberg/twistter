@@ -1,4 +1,4 @@
-package servlet;
+package deprecated.servlet;
 
 import java.io.EOFException;
 import java.io.IOException;

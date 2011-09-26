@@ -1,4 +1,4 @@
-package servlet;
+package deprecated.servlet;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
