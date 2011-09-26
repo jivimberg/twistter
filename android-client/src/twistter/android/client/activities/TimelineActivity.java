@@ -2,7 +2,6 @@ package twistter.android.client.activities;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 import twistter.android.client.R;
 import twistter.android.client.services.TimelineService;
@@ -10,7 +9,6 @@ import twitter4j.Status;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;

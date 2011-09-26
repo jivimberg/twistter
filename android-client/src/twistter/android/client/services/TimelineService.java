@@ -1,34 +1,30 @@
 package twistter.android.client.services;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import twistter.android.client.R;
 import twistter.android.client.activities.TimelineActivity;
-import twistter.android.client.utils.MyHttpClient;
 import twistter.android.client.utils.TwitterUtils;
+import twistter.android.client.ws.interfaces.HessianServiceProvider;
+import twistter.android.client.ws.interfaces.TimelineWebService;
 import twitter4j.Status;
 import android.app.Service;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class TimelineService extends Service {
 	
-	private String TIMELINE_SERVLET_URL; 
+	private String TIMELINE_WEB_SERVICE_URL; 
 	public static TimelineActivity ACTIVIDAD;
 	private Timer timer = null;
 	private Handler uiHandler;
@@ -40,11 +36,12 @@ public class TimelineService extends Service {
 
 	public void onCreate(){
 		super.onCreate();
+		
+		TIMELINE_WEB_SERVICE_URL = "http://" + getString(R.string.ServerIP) + ":" 
+		+ getString(R.string.ServerPort) + "/" + getString(R.string.ServerRootName) + "/" + getString(R.string.TimelineWebService);
 		this.iniciarServicio();
-
+		
 		Log.i(getClass().getSimpleName(), "Servicio iniciado");
-		TIMELINE_SERVLET_URL = "http://" + getString(R.string.ServerIP) + ":" 
-		+ getString(R.string.ServerPort) + "/" + getString(R.string.ServerRootName) + "/" + getString(R.string.TimelineServlet);
 		lastJsonArray = new JSONArray();
 	}
 
@@ -116,16 +113,13 @@ public class TimelineService extends Service {
 	
 
 	private void ejecutarTarea(){
-		
 		Log.i(getClass().getSimpleName(), "Trayendo timeline...");
-
-		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-    	
-    	postParameters.add(new BasicNameValuePair("method", "getTimeline"));
     	String response = null;
     	try {
-    	    response = MyHttpClient.executeHttpPost(TIMELINE_SERVLET_URL, postParameters);
-    	    System.out.println(response);
+    		final TimelineWebService timelineWebService = HessianServiceProvider.getTimelineWebService(TIMELINE_WEB_SERVICE_URL, getClassLoader());
+    		final String username = getSharedPreferences(getString(R.string.PrefsName), MODE_PRIVATE).getString(getString(R.string.PrefUserName), null);
+			response = timelineWebService.getTimeline(username);
+    	    
     	    final JSONArray jsonArray = new JSONArray(response);  	    
    
     	    for (int i = 0; i < jsonArray.length(); i++){
