@@ -11,50 +11,50 @@
 	</welcome-file-list>
 	
 	<servlet>
-		<description>LoginServlet</description>
-		<display-name>LoginServlet</display-name>
-		<servlet-name>LoginServlet</servlet-name>
-		<servlet-class>servlet.LoginServlet</servlet-class>
+		<description>Login Web Service</description>
+		<display-name>LoginWebService</display-name>
+		<servlet-name>LoginWebService</servlet-name>
+		<servlet-class>hessianws.impl.LoginWebServiceImpl</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>
-		<servlet-name>LoginServlet</servlet-name>
-		<url-pattern>/LoginServlet</url-pattern>
+		<servlet-name>LoginWebService</servlet-name>
+		<url-pattern>/LoginWebService</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
-		<description>TimelineServlet</description>
-		<display-name>TimelineServlet</display-name>
-		<servlet-name>TimelineServlet</servlet-name>
-		<servlet-class>servlet.TimelineServlet</servlet-class>
+		<description>Timeline Web Service</description>
+		<display-name>TimelineWebService</display-name>
+		<servlet-name>TimelineWebService</servlet-name>
+		<servlet-class>hessianws.impl.TimelineWebServiceImpl</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>
-		<servlet-name>TimelineServlet</servlet-name>
-		<url-pattern>/TimelineServlet</url-pattern>
+		<servlet-name>TimelineWebService</servlet-name>
+		<url-pattern>/TimelineWebService</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
-		<description>RegisterServlet</description>
-		<display-name>RegisterServlet</display-name>
-		<servlet-name>RegisterServlet</servlet-name>
-		<servlet-class>servlet.RegisterServlet</servlet-class>
+		<description>Register Web Service</description>
+		<display-name>RegisterWebService</display-name>
+		<servlet-name>RegisterWebService</servlet-name>
+		<servlet-class>hessianws.impl.RegisterWebServiceImpl</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>
-		<servlet-name>RegisterServlet</servlet-name>
-		<url-pattern>/RegisterServlet</url-pattern>
+		<servlet-name>RegisterWebService</servlet-name>
+		<url-pattern>/RegisterWebService</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
-		<description>UpdateStatusServlet</description>
-		<display-name>UpdateStatusServlet</display-name>
-		<servlet-name>UpdateStatusServlet</servlet-name>
-		<servlet-class>servlet.UpdateStatusServlet</servlet-class>
+		<description>Update Status Web Service</description>
+		<display-name>UpdateStatusWebService</display-name>
+		<servlet-name>UpdateStatusWebService</servlet-name>
+		<servlet-class>hessianws.impl.UpdateStatusWebServiceImpl</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>
-		<servlet-name>UpdateStatusServlet</servlet-name>
-		<url-pattern>/UpdateStatusServlet</url-pattern>
+		<servlet-name>UpdateStatusWebService</servlet-name>
+		<url-pattern>/UpdateStatusWebService</url-pattern>
 	</servlet-mapping>
 </web-app>

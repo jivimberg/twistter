@@ -1,6 +1,7 @@
 package services;
 
 import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 
 import daos.AccessTokenDAO;
 import daos.impl.FileAccessTokenDAO;
@@ -15,8 +16,12 @@ public class UserService {
 		accessToken = new FileAccessTokenDAO();
 	}
 	
-	public boolean login(@NotNull String username,@NotNull String password){
+	public boolean isRegistered(@NotNull String username, @Nullable String password){
 		return (username != null && accessToken.existAccessToken(username));
+	}
+	
+	public boolean isRegistered(@NotNull String username){
+		return isRegistered(username, null);
 	}
 	
 	public static UserService getInstance(){
