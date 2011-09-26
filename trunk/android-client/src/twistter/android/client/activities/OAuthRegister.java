@@ -1,7 +1,12 @@
 package twistter.android.client.activities;
 
+import java.net.MalformedURLException;
+
 import twistter.android.client.R;
 import twistter.android.client.utils.MyHttpClient;
+import twistter.android.client.ws.interfaces.HessianServiceProvider;
+import twistter.android.client.ws.interfaces.RegisterWebService;
+import twistter.android.client.ws.interfaces.TimelineWebService;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -23,15 +28,15 @@ public class OAuthRegister extends Activity {
 	private static final String CONSUMER_SECRET =  "Y9ESDVow06aPd4v8uuP5mmVoEYAoq32QjhBPzz9u24";
 	private Twitter twitter;
 	private RequestToken requestToken;
-	private String LOGIN_SERVLET_URL;
+	private String REGISTER_WEB_SERVICE_URL;
 	
 	
     /** Called when the activity is first created. */
 	public void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         
-        LOGIN_SERVLET_URL = "http://" + getString(R.string.ServerIP) + ":" 
-    	+ getString(R.string.ServerPort) + "/" + getString(R.string.ServerRootName) + "/" + getString(R.string.RegisterServlet);
+        REGISTER_WEB_SERVICE_URL = "http://" + getString(R.string.ServerIP) + ":" 
+    	+ getString(R.string.ServerPort) + "/" + getString(R.string.ServerRootName) + "/" + getString(R.string.RegisterWebService);
         
         //initiate twitter
         twitter = createAuthenticatedService();
@@ -58,13 +63,20 @@ public class OAuthRegister extends Activity {
     			AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, verifier);
     			
     			//TODO Send Token to server for storage!
-    	    	MyHttpClient.sendObjectToServer(LOGIN_SERVLET_URL, accessToken);
+    			final RegisterWebService registerWebService = HessianServiceProvider.getRegisterWebService(REGISTER_WEB_SERVICE_URL, getClassLoader());
+    			registerWebService.register(accessToken.getToken(), accessToken.getTokenSecret());
     			
     			String userName = twitter.showUser(accessToken.getUserId()).getName();
     			Toast.makeText(getApplicationContext(),"Thanks " + userName + " you have been successfully registered",Toast.LENGTH_SHORT).show();
     		}    		
-    	}catch (TwitterException e) {
-			Log.e(getClass().getName(), e.getErrorMessage());
+    	}catch (MalformedURLException e) {
+			Log.e(getClass().getName(), e.getMessage());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TwitterException e) {
+			Log.e(getClass().getName(), e.getMessage());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} finally{
 			Intent myIntent = new Intent(OAuthRegister.this, LoginActivity.class);
 			startActivity(myIntent);

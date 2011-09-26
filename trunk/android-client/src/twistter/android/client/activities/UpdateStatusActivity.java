@@ -1,12 +1,8 @@
 package twistter.android.client.activities;
 
-import java.util.ArrayList;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
 import twistter.android.client.R;
-import twistter.android.client.utils.MyHttpClient;
+import twistter.android.client.ws.interfaces.HessianServiceProvider;
+import twistter.android.client.ws.interfaces.UpdateStatusWebService;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,14 +13,14 @@ import android.widget.Toast;
 
 public class UpdateStatusActivity extends Activity {
    
-	private String UPDATE_STATUS__SERVLET_URL; 
+	private String UPDATE_STATUS_WEB_SERVICE_URL; 
     
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update_status_layout);
 
-        UPDATE_STATUS__SERVLET_URL = "http://" + getString(R.string.ServerIP) + ":" 
-    	+ getString(R.string.ServerPort) + "/" + getString(R.string.ServerRootName) + "/" + getString(R.string.UpdateStatusServlet);
+        UPDATE_STATUS_WEB_SERVICE_URL = "http://" + getString(R.string.ServerIP) + ":" 
+    	+ getString(R.string.ServerPort) + "/" + getString(R.string.ServerRootName) + "/" + getString(R.string.UpdateStatusWebService);
         
         Button tweetButton = (Button) findViewById(R.id.tweet_button);
 
@@ -32,19 +28,21 @@ public class UpdateStatusActivity extends Activity {
             public void onClick(View v) {
             	String response = null;
             	try {
-            		EditText statusText = (EditText) findViewById(R.id.statusText);
-            		String msg = statusText.getText().toString();
-            		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-                	postParameters.add(new BasicNameValuePair("message", msg));
-            	    response = MyHttpClient.executeHttpPost(UPDATE_STATUS__SERVLET_URL, postParameters);
-            	    if(response != null && response.contains((String)"true")){ 
+            		final EditText statusText = (EditText) findViewById(R.id.statusText);
+            		final String msg = statusText.getText().toString();
+            		final String username = getSharedPreferences(getString(R.string.PrefsName), MODE_PRIVATE).getString(getString(R.string.PrefUserName), null);
+            		
+            		UpdateStatusWebService updateStatusWebService = HessianServiceProvider.getUpdateStatusWebService(UPDATE_STATUS_WEB_SERVICE_URL, getClassLoader());
+            		response = updateStatusWebService.updateStatus(username, msg);
+            		
+            	    if(response != null && response.contains("true")){ 
                             Toast.makeText(getApplicationContext(),"Message updated successfully",Toast.LENGTH_LONG).show();
                             Intent myIntent = new Intent(UpdateStatusActivity.this, TimelineActivity.class);
                             UpdateStatusActivity.this.startActivity(myIntent);
                 		}
             	} catch (Exception e) {
-            		Toast.makeText(getApplicationContext(),"Couldn't connect to server: "
-            				+ UPDATE_STATUS__SERVLET_URL + ". Try again later.",Toast.LENGTH_LONG).show();
+            		e.printStackTrace();
+            		Toast.makeText(getApplicationContext(),"Couldn't connect to server. Please try again later.",Toast.LENGTH_LONG).show();
             	}   	
             } 
         });
