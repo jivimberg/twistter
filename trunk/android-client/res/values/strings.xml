@@ -3,7 +3,7 @@
     <string name="hello">Hello World, TwistterActivity!</string>
     <string name="app_name">Twistter Android Application</string>
     
-	<string name="ServerIP">192.168.0.4</string>
+	<string name="ServerIP">192.168.0.8</string>
 	<string name="ServerPort">8080</string>
 	
 	<string name="PrefsName">PREFS_NAME</string>
