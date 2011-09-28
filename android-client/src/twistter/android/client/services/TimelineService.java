@@ -21,6 +21,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TimelineService extends Service {
 	
@@ -124,6 +125,9 @@ public class TimelineService extends Service {
    
     	    for (int i = 0; i < jsonArray.length(); i++){
     	    	if(!isCached(jsonArray.getString(i))){
+    	    		if(lastJsonArray.length() != 0){
+    	    			Toast.makeText(getApplicationContext(),"Timeline Updated",Toast.LENGTH_SHORT).show();
+    	    		}
     	    		View inflatedView = View.inflate(ACTIVIDAD, R.layout.status, null);
         	    	
         	    	TextView tweet_username = (TextView) inflatedView.findViewById(R.id.tweet_username);
