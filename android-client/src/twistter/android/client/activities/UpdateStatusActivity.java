@@ -5,6 +5,7 @@ import twistter.android.client.ws.interfaces.HessianServiceProvider;
 import twistter.android.client.ws.interfaces.UpdateStatusWebService;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,7 +33,11 @@ public class UpdateStatusActivity extends Activity {
         statusText.addTextChangedListener(new TextWatcher(){
             public void afterTextChanged(Editable s) {
                 int charCount = statusText.getText().toString().length();
-                textView.setText(String.valueOf(140 - charCount) + " characters left");
+                final int charsLeft = 140 - charCount;
+                textView.setText(String.valueOf(charsLeft) + " characters left");
+                if(charsLeft < 0 ) {
+                	textView.setTextColor(Color.RED);                	
+                }
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after){}
             public void onTextChanged(CharSequence s, int start, int before, int count){}
@@ -41,8 +46,14 @@ public class UpdateStatusActivity extends Activity {
         tweetButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	String response = null;
+            	final String msg = statusText.getText().toString();
+            	
+            	if(msg.toString().length() > 140){
+            		Toast.makeText(getApplicationContext(),"Your message is to long, please make it shorter.",Toast.LENGTH_LONG).show();
+            		return;
+            	}
+            	
             	try {
-            		final String msg = statusText.getText().toString();
             		final String username = getSharedPreferences(getString(R.string.PrefsName), MODE_PRIVATE).getString(getString(R.string.PrefUserName), null);
             		
             		UpdateStatusWebService updateStatusWebService = HessianServiceProvider.getUpdateStatusWebService(UPDATE_STATUS_WEB_SERVICE_URL, getClassLoader());
