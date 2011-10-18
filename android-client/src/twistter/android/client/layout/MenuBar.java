@@ -1,5 +1,6 @@
 package twistter.android.client.layout;
 
+import twistter.android.client.activities.DBActivity;
 import twistter.android.client.activities.UpdateStatusActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -33,7 +34,8 @@ public class MenuBar extends LinearLayout {
         filterButton.setText(text);
         filterButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Perform action on click
+            	Intent myIntent = new Intent(context, DBActivity.class);
+    	    	context.startActivity(myIntent);
             }
         });
         addView(filterButton);

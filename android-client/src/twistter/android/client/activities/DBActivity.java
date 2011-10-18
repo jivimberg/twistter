@@ -5,19 +5,22 @@ import twistter.android.client.database.DBAdapter;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class DatabaseActivity extends Activity {
-    private DBAdapter db;
+public class DBActivity extends Activity {
+    private DBAdapter dbAdapter;
 
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        db = new DBAdapter(this); 
+        dbAdapter = new DBAdapter(this); 
+        dbAdapter.open();
+        dbAdapter.insertTweet("jiviName", "jiviJson");
+        setContentView(R.layout.main); 
     }
     
     public DBAdapter getDBAdapter(){
-    	return db;
+    	return dbAdapter;
     }
 }
 
