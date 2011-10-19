@@ -9,6 +9,7 @@ import org.json.JSONException;
 
 import twistter.android.client.R;
 import twistter.android.client.activities.TimelineActivity;
+import twistter.android.client.database.PersistTweetsTask;
 import twistter.android.client.utils.TwitterUtils;
 import twistter.android.client.ws.interfaces.HessianServiceProvider;
 import twistter.android.client.ws.interfaces.TimelineWebService;
@@ -121,28 +122,32 @@ public class TimelineService extends Service {
     		final String username = getSharedPreferences(getString(R.string.PrefsName), MODE_PRIVATE).getString(getString(R.string.PrefUserName), null);
 			response = timelineWebService.getTimeline(username);
     	    
-    	    final JSONArray jsonArray = new JSONArray(response);  	    
+    	    final JSONArray jsonArray = new JSONArray(response);  	   
+    	    
+    	    //Init persist task
+    	    final PersistTweetsTask persistTweetsTask = new PersistTweetsTask(this, jsonArray, username);
+    	    persistTweetsTask.run();
    
     	    for (int i = 0; i < jsonArray.length(); i++){
     	    	if(!isCached(jsonArray.getString(i))){
     	    		if(lastJsonArray.length() != 0){
     	    			Toast.makeText(getApplicationContext(),"Timeline Updated",Toast.LENGTH_SHORT).show();
     	    		}
-    	    		View inflatedView = View.inflate(ACTIVIDAD, R.layout.status, null);
+    	    		final View inflatedView = View.inflate(ACTIVIDAD, R.layout.status, null);
         	    	
-        	    	TextView tweet_username = (TextView) inflatedView.findViewById(R.id.tweet_username);
-        	    	TextView tweet_text = (TextView) inflatedView.findViewById(R.id.tweet_text);
+        	    	final TextView tweet_username = (TextView) inflatedView.findViewById(R.id.tweet_username);
+        	    	final TextView tweet_text = (TextView) inflatedView.findViewById(R.id.tweet_text);
         	    	
         	    	
-        	    	String rawJson = jsonArray.getString(i);
-        	    	Status status = TwitterUtils.getStatusFromJSON(rawJson);
+        	    	final String rawJson = jsonArray.getString(i);
+        	    	final Status status = TwitterUtils.getStatusFromJSON(rawJson);
         	    	
         	    	
         	    	tweet_username.setText("@"+status.getUser().getScreenName()+" ("+status.getUser().getName()+")");
         	    	tweet_text.setText(status.getText());
         	    	
         	    	// Reflejamos la tarea en la actividad principal
-            	    Message message = new Message();
+            	    final Message message = new Message();
             	    ArrayList<Object> arrayMessage = new ArrayList<Object>();
             	    arrayMessage.add(inflatedView);
             	    arrayMessage.add(status.getUser().getProfileImageURL().toString());
