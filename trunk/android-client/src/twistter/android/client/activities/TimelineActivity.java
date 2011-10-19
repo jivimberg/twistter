@@ -5,10 +5,10 @@ import java.util.ArrayList;
 
 import twistter.android.client.R;
 import twistter.android.client.services.TimelineService;
-import twitter4j.Status;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,13 +30,13 @@ public class TimelineActivity extends Activity{
         setContentView(R.layout.timeline); //Agregar el nuevo activity
         startService();
         pd = ProgressDialog.show(this, "Twistter", "Loading timeline...");
+        final Drawable defaultProfilePicture = getResources().getDrawable(R.drawable.defaultavatar);
         
         myHandler = new Handler(){
 			public void handleMessage(Message msg) {
 				TimelineService.ACTIVIDAD.dismissProgressLoader();
 				ArrayList<Object> arrayMessage = (ArrayList<Object>) msg.obj;
 				View statusView = (View) arrayMessage.get(0);
-				Status status = (Status) arrayMessage.get(1);
 				
 				LinearLayout scroll = (LinearLayout) findViewById(R.id.timeline);
 
@@ -44,13 +44,14 @@ public class TimelineActivity extends Activity{
 					
 				ImageView tweet_user_image = (ImageView) statusView.findViewById(R.id.tweet_user_image);
 				 try{
-					//String url = status.getUser().getProfileImageURL().toString();
-					//String hack = url.substring(0,url.length()-11)+"_reasonably_small"+url.substring(url.length()-4,url.length());
+					String url =  (String) arrayMessage.get(1);
+					String hack = url.substring(0,url.length()-11)+"_reasonably_small"+url.substring(url.length()-4,url.length());
 
 
-     	    		//Drawable profilePicture = drawable_from_url(hack, "image");
-     	    		//tweet_user_image.setBackgroundDrawable(profilePicture);    	    					
+     	    		Drawable profilePicture = drawable_from_url(hack, "image");
+     	    		tweet_user_image.setBackgroundDrawable(profilePicture);    	    					
      	    	}catch (Exception e) {
+     	    		tweet_user_image.setBackgroundDrawable(defaultProfilePicture);
      	    		Log.w(getClass().getSimpleName(), "No se pudo cargar la imagen");
      	    	}
 				//}

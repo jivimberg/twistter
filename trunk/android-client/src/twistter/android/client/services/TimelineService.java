@@ -145,7 +145,7 @@ public class TimelineService extends Service {
             	    Message message = new Message();
             	    ArrayList<Object> arrayMessage = new ArrayList<Object>();
             	    arrayMessage.add(inflatedView);
-            	    arrayMessage.add(status);
+            	    arrayMessage.add(status.getUser().getProfileImageURL().toString());
                     message.obj = arrayMessage;
                     uiHandler = TimelineService.ACTIVIDAD.getMyHandler();
                     uiHandler.sendMessage(message);
