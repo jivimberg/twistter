@@ -19,7 +19,7 @@ public class TwitterServiceTestCase extends TestCase {
 	}
 	
 	public void testGetTimeline() throws TwitterException{
-		final List<Status> timeline = twitterService.getHomeTimeline(userId);
+		final List<Status> timeline = twitterService.getHomeTimeline(userId, null);
 		assertFalse("The timeline is empty", timeline.isEmpty());
 		assertTrue("The timeline size is not the expected", 20 >= timeline.size());
 		

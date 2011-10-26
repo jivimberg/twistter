@@ -17,7 +17,7 @@ public class JSONTestCase extends TestCase {
 	public void testsStatusToJSON() throws TwitterException, JSONException{
 		twitterService = TwitterService.getInstance();
 		
-		List<Status> timeline = twitterService.getHomeTimeline("jivimberg");
+		List<Status> timeline = twitterService.getHomeTimeline("jivimberg", null);
 		Status status = timeline.get(0);
 		System.out.println(status.getText());
 		

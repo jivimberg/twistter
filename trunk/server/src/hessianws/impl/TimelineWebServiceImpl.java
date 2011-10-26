@@ -30,7 +30,7 @@ public class TimelineWebServiceImpl extends HessianServlet implements TimelineWe
 	/* (non-Javadoc)
 	 * @see hessianws.impl.TimelineWebServiceInterface#getTimeline(java.lang.String)
 	 */
-	public String getTimeline(String username){
+	public String getTimeline(String username, Long sinceId){
 		//check user is registered
 		if(!userService.isRegistered(username)){
 			//TODO fail
@@ -40,7 +40,7 @@ public class TimelineWebServiceImpl extends HessianServlet implements TimelineWe
 
 		List<Status> timeline;
 		try {
-			timeline = twitterService.getHomeTimeline(username);
+			timeline = twitterService.getHomeTimeline(username, sinceId);
 			List<Status> filteredTimeline = filterService.filter(username, timeline);
 			
 			System.out.println(timeline.size() - filteredTimeline.size() + " tweets filtered");
