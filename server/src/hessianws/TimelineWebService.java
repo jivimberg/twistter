@@ -2,6 +2,6 @@ package hessianws;
 
 public interface TimelineWebService {
 
-	public abstract String getTimeline(String username);
+	public abstract String getTimeline(String username, Long sinceId);
 
 }

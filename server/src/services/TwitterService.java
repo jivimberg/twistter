@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 
 import twitter4j.Paging;
 import twitter4j.Status;
@@ -55,10 +56,10 @@ public class TwitterService {
 			myTwitter.setOAuthAccessToken(accessToken);
 	}
 
-	public List<Status> getHomeTimeline(@NotNull String userId) throws TwitterException{
+	public List<Status> getHomeTimeline(@NotNull String userId, @Nullable Long sinceId) throws TwitterException{
 		useAccessToken(userId);
 		
-		final Paging paging = new Paging (1,20);
+		final Paging paging = (sinceId == null) ? new Paging (1,20) : new Paging(sinceId);
 		return myTwitter.getHomeTimeline(paging);
 	}
 	
