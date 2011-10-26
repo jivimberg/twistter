@@ -36,31 +36,30 @@ public class TimelineActivity extends Activity{
 			public void handleMessage(Message msg) {
 				TimelineService.ACTIVIDAD.dismissProgressLoader();
 				ArrayList<Object> arrayMessage = (ArrayList<Object>) msg.obj;
-				View statusView = (View) arrayMessage.get(0);
-				
-				LinearLayout scroll = (LinearLayout) findViewById(R.id.timeline);
-
-				scroll.addView(statusView,0);
+				if(arrayMessage.get(0) == "TIMELINE_SERVICE"){
+					View statusView = (View) arrayMessage.get(1);
 					
-				ImageView tweet_user_image = (ImageView) statusView.findViewById(R.id.tweet_user_image);
-				 try{
-					String url =  (String) arrayMessage.get(1);
-					String hack = url.substring(0,url.length()-11)+"_reasonably_small"+url.substring(url.length()-4,url.length());
-
-
-     	    		Drawable profilePicture = drawable_from_url(hack, "image");
-     	    		tweet_user_image.setBackgroundDrawable(profilePicture);    	    					
-     	    	}catch (Exception e) {
-     	    		tweet_user_image.setBackgroundDrawable(defaultProfilePicture);
-     	    		Log.w(getClass().getSimpleName(), "No se pudo cargar la imagen");
-     	    	}
-				//}
-				
-				//TextView filterTweetsCounter = (TextView)  findViewById(R.id.filtered_tweets_counter);
-				//filterTweetsCounter.setText(20 - statusViews.size() + " filtered");
-				//toastNotify(20 - statusViews.size() + " tweets filtrados"); //TODO valor hardcodeado!
-	    	
-			
+					LinearLayout scroll = (LinearLayout) findViewById(R.id.timeline);
+					
+					scroll.addView(statusView,0);
+					
+					ImageView tweet_user_image = (ImageView) statusView.findViewById(R.id.tweet_user_image);
+					//temporal 
+					tweet_user_image.setBackgroundDrawable(defaultProfilePicture);
+//					try{
+//						String url =  (String) arrayMessage.get(2);
+//						
+//						Drawable profilePicture = drawable_from_url(url, "image");
+//						tweet_user_image.setBackgroundDrawable(profilePicture);    	    					
+//					}catch (Exception e) {
+//						tweet_user_image.setBackgroundDrawable(defaultProfilePicture);
+//						Log.w(getClass().getSimpleName(), "No se pudo cargar la imagen");
+//					}
+					
+					//TextView filterTweetsCounter = (TextView)  findViewById(R.id.filtered_tweets_counter);
+					//filterTweetsCounter.setText(20 - statusViews.size() + " filtered");
+					//toastNotify(20 - statusViews.size() + " tweets filtrados"); //TODO valor hardcodeado!
+				}
 			}  
 	    };
 	}
