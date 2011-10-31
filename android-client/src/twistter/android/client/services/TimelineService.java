@@ -9,40 +9,41 @@ import org.json.JSONException;
 
 import twistter.android.client.R;
 import twistter.android.client.activities.TimelineActivity;
+import twistter.android.client.database.DBAdapter;
 import twistter.android.client.database.PersistTweetsTask;
 import twistter.android.client.utils.TwitterUtils;
 import twistter.android.client.ws.interfaces.HessianServiceProvider;
 import twistter.android.client.ws.interfaces.TimelineWebService;
 import twitter4j.Status;
+import twitter4j.TwitterException;
 import android.app.Service;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class TimelineService extends Service {
 	
-	private static final String TIMELINE_ID = "TIMELINE_SERVICE";
 	private String TIMELINE_WEB_SERVICE_URL; 
-	public static TimelineActivity ACTIVIDAD;
+	public static TimelineActivity timelineActivity;
 	private Timer timer = null;
 	private Handler uiHandler;
+	private DBAdapter dbAdapter;
 	
 	private Long lastRetrievedTweetId;
-
-	public static void establecerActividadPrincipal(TimelineActivity actividad){
-		TimelineService.ACTIVIDAD=actividad;
-	}
 
 	public void onCreate(){
 		super.onCreate();
 		
 		TIMELINE_WEB_SERVICE_URL = "http://" + getString(R.string.ServerIP) + ":" 
 		+ getString(R.string.ServerPort) + "/" + getString(R.string.ServerRootName) + "/" + getString(R.string.TimelineWebService);
+		dbAdapter = new DBAdapter(this);
+		
+		populateTimeline();
 		this.initScheduledTask();
 		
 		Log.i(getClass().getSimpleName(), "Servicio iniciado");
@@ -53,7 +54,7 @@ public class TimelineService extends Service {
 		super.onDestroy();
 
 		// Detenemos el servicio
-		this.finalizarServicio();
+		this.stopScheduledTask();
 		Log.i(getClass().getSimpleName(), "Servicio detenido");
 	}
 
@@ -85,7 +86,7 @@ public class TimelineService extends Service {
 		}
 	}
 
-	public void finalizarServicio(){
+	public void stopScheduledTask(){
 		try{
 			Log.i(getClass().getSimpleName(), "Finalizando servicio...");
 
@@ -100,7 +101,34 @@ public class TimelineService extends Service {
 		}
 	}
 	
+	private void populateTimeline() {
+		//Get tweets from the database and send them to the UI
+		dbAdapter = new DBAdapter(this);
+		dbAdapter.open();
+		final Cursor cursor = dbAdapter.getLastNTweets(50);
+		if(!cursor.moveToFirst()){
+			return;
+		}
+		
+		while (!cursor.isAfterLast()) {
+			try {
+				final Status status = TwitterUtils.getStatusFromJSON(cursor.getString(2));
+				sendMessageToUI(status);
 
+				if(cursor.isLast()){
+					lastRetrievedTweetId = status.getId();
+					Log.i(this.getClass().getName(), "Timeline populated from database");
+				}
+			} catch (TwitterException e) {
+				e.printStackTrace();
+			}
+            cursor.moveToNext();
+            
+        }
+        cursor.close();
+        dbAdapter.close();
+	}
+	
 	private void executeTask(){
 		Log.i(getClass().getSimpleName(), "Trayendo timeline...");
     	String response = null;
@@ -118,27 +146,9 @@ public class TimelineService extends Service {
    
     	    //Send them to the UI
     	    for (int i = 0; i < jsonArray.length(); i++){
-	    		final View inflatedView = View.inflate(ACTIVIDAD, R.layout.status, null);
-    	    	
-    	    	final TextView tweet_username = (TextView) inflatedView.findViewById(R.id.tweet_username);
-    	    	final TextView tweet_text = (TextView) inflatedView.findViewById(R.id.tweet_text);
-    	    	
-    	    	
     	    	final String rawJson = jsonArray.getString(i);
     	    	final Status status = TwitterUtils.getStatusFromJSON(rawJson);
-    	    	
-    	    	tweet_username.setText("@"+status.getUser().getScreenName()+" ("+status.getUser().getName()+")");
-    	    	tweet_text.setText(status.getText());
-    	    	
-    	    	// Reflejamos la tarea en la actividad principal
-        	    final Message message = new Message();
-        	    ArrayList<Object> arrayMessage = new ArrayList<Object>();
-        	    arrayMessage.add(TIMELINE_ID);
-        	    arrayMessage.add(inflatedView);
-        	    arrayMessage.add(status.getUser().getProfileImageURL().toString());
-                message.obj = arrayMessage;
-                uiHandler = TimelineService.ACTIVIDAD.getMyHandler();
-                uiHandler.sendMessage(message);
+    	    	sendMessageToUI(status);
 
                 //store last tweet id
                 if(i == jsonArray.length() - 1){
@@ -154,7 +164,24 @@ public class TimelineService extends Service {
 		}
 	}
 	
-	
+	private void sendMessageToUI(Status status){
+	  	final View inflatedView = View.inflate(timelineActivity, R.layout.status, null);
+
+    	final TextView tweet_username = (TextView) inflatedView.findViewById(R.id.tweet_username);
+    	final TextView tweet_text = (TextView) inflatedView.findViewById(R.id.tweet_text);
+
+    	tweet_username.setText("@"+status.getUser().getScreenName()+" ("+status.getUser().getName()+")");
+    	tweet_text.setText(status.getText());
+    	
+    	// Reflejamos la tarea en la actividad principal
+	    final Message message = new Message();
+	    ArrayList<Object> arrayMessage = new ArrayList<Object>();
+	    arrayMessage.add(inflatedView);
+	    arrayMessage.add(status.getUser().getProfileImageURL().toString());
+        message.obj = arrayMessage;
+        uiHandler = TimelineService.timelineActivity.getMyHandler();
+        uiHandler.sendMessage(message);
+	}
             
 }
 
