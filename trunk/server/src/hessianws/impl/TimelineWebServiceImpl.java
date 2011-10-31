@@ -43,6 +43,7 @@ public class TimelineWebServiceImpl extends HessianServlet implements TimelineWe
 			timeline = twitterService.getHomeTimeline(username, sinceId);
 			List<Status> filteredTimeline = filterService.filter(username, timeline);
 			
+			System.out.println("sending " + timeline.size() + " tweets");
 			System.out.println(timeline.size() - filteredTimeline.size() + " tweets filtered");
 			
 			List<String> jsonTimeline = JSONUtils.getJSON(filteredTimeline);
