@@ -27,27 +27,26 @@ public class TimelineActivity extends Activity{
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.timeline); //Agregar el nuevo activity
+        setContentView(R.layout.timeline); 
         startService();
         pd = ProgressDialog.show(this, "Twistter", "Loading timeline...");
         final Drawable defaultProfilePicture = getResources().getDrawable(R.drawable.defaultavatar);
         
         myHandler = new Handler(){
 			public void handleMessage(Message msg) {
-				TimelineService.ACTIVIDAD.dismissProgressLoader();
+				dismissProgressLoader();
 				ArrayList<Object> arrayMessage = (ArrayList<Object>) msg.obj;
-				if(arrayMessage.get(0) == "TIMELINE_SERVICE"){
-					View statusView = (View) arrayMessage.get(1);
-					
-					LinearLayout scroll = (LinearLayout) findViewById(R.id.timeline);
-					
-					scroll.addView(statusView,0);
-					
-					ImageView tweet_user_image = (ImageView) statusView.findViewById(R.id.tweet_user_image);
-					//temporal 
-					tweet_user_image.setBackgroundDrawable(defaultProfilePicture);
+				View statusView = (View) arrayMessage.get(0);
+				
+				LinearLayout scroll = (LinearLayout) findViewById(R.id.timeline);
+				
+				scroll.addView(statusView,0);
+				
+				ImageView tweet_user_image = (ImageView) statusView.findViewById(R.id.tweet_user_image);
+				//temporal 
+				tweet_user_image.setBackgroundDrawable(defaultProfilePicture);
 //					try{
-//						String url =  (String) arrayMessage.get(2);
+//						String url =  (String) arrayMessage.get(1);
 //						
 //						Drawable profilePicture = drawable_from_url(url, "image");
 //						tweet_user_image.setBackgroundDrawable(profilePicture);    	    					
@@ -55,23 +54,23 @@ public class TimelineActivity extends Activity{
 //						tweet_user_image.setBackgroundDrawable(defaultProfilePicture);
 //						Log.w(getClass().getSimpleName(), "No se pudo cargar la imagen");
 //					}
-					
-					//TextView filterTweetsCounter = (TextView)  findViewById(R.id.filtered_tweets_counter);
-					//filterTweetsCounter.setText(20 - statusViews.size() + " filtered");
-					//toastNotify(20 - statusViews.size() + " tweets filtrados"); //TODO valor hardcodeado!
-				}
-			}  
+				
+				//TextView filterTweetsCounter = (TextView)  findViewById(R.id.filtered_tweets_counter);
+				//filterTweetsCounter.setText(20 - statusViews.size() + " filtered");
+				//toastNotify(20 - statusViews.size() + " tweets filtrados"); //TODO valor hardcodeado!
+			}
+			
 	    };
 	}
 	
 	private void startService(){
-	    TimelineService.ACTIVIDAD=this;
-
+		//TODO -> this sucks
+		TimelineService.timelineActivity = this;
 	    try{
 			Log.i(getClass().getSimpleName(), "Iniciando servicio desde el login...");
 		    timelineService = new Intent(this, TimelineService.class);
 
-		    if(startService(timelineService)==null){
+		    if(startService(timelineService) == null){
                 toastNotify("No se ha podido iniciar el servicio");
 		    }
 		    else{

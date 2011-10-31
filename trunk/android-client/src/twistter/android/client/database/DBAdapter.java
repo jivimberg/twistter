@@ -27,7 +27,7 @@ public class DBAdapter {
     
     private DatabaseHelper DBHelper;
     private SQLiteDatabase db;
-
+    
     public DBAdapter(Context ctx) 
     {
         this.context = ctx;
@@ -67,11 +67,24 @@ public class DBAdapter {
  		return db.delete(TWEETS_TABLE_NAME, KEY_ROWID + "=" + rowId, null) > 0;
  	}
   
-     //---retrieves all the titles---
+     public Cursor getLastNTweets(int n) 
+     {
+		return db.query(TWEETS_TABLE_NAME,
+				new String[] { KEY_ROWID, KEY_USERNAME, KEY_JSON }, null, null, null, null, null, Integer.valueOf(n).toString());
+     }
+     
+   //---retrieves all the titles---
      public Cursor getAllTweets() 
      {
 		return db.query(TWEETS_TABLE_NAME,
-				new String[] { KEY_ROWID, KEY_JSON }, null, null, null, null, null);
+				new String[] { KEY_ROWID, KEY_USERNAME, KEY_JSON }, null, null, null, null, null, null);
+     }
+     
+     //---retrieves all the titles---
+     public Cursor getAllTweetsFrom(int id) 
+     {
+		return db.query(TWEETS_TABLE_NAME,
+				new String[] { KEY_ROWID, KEY_USERNAME, KEY_JSON }, KEY_ROWID + ">" + id, null, null, null, null);
      }
      
      //---retrieves a single tweet---
@@ -118,7 +131,6 @@ public class DBAdapter {
              onCreate(db);
          }
      }  
-    
     
 }
 
