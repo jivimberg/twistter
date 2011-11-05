@@ -19,11 +19,13 @@ import twitter4j.TwitterException;
 import android.app.Service;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class TimelineService extends Service {
@@ -43,7 +45,7 @@ public class TimelineService extends Service {
 		+ getString(R.string.ServerPort) + "/" + getString(R.string.ServerRootName) + "/" + getString(R.string.TimelineWebService);
 		dbAdapter = new DBAdapter(this);
 		
-		populateTimeline();
+		executePopulateTimeline();
 		this.initScheduledTask();
 		
 		Log.i(getClass().getSimpleName(), "Servicio iniciado");
@@ -101,36 +103,38 @@ public class TimelineService extends Service {
 		}
 	}
 	
-	private void populateTimeline() {
-		//Get tweets from the database and send them to the UI
-		dbAdapter = new DBAdapter(this);
+	private void executePopulateTimeline() {
+		// Get tweets from the database and send them to the UI
+		dbAdapter = new DBAdapter(timelineActivity);
 		dbAdapter.open();
-		final Cursor cursor = dbAdapter.getLastNTweets(50);
-		if(!cursor.moveToFirst()){
+		final Cursor cursor = dbAdapter.getLastNTweets(30);
+		if (!cursor.moveToFirst()) {
 			return;
 		}
-		
+
 		while (!cursor.isAfterLast()) {
 			try {
-				final Status status = TwitterUtils.getStatusFromJSON(cursor.getString(2));
+				final Status status = TwitterUtils.getStatusFromJSON(cursor
+						.getString(2));
 				sendMessageToUI(status);
 
-				if(cursor.isLast()){
+				if (cursor.isFirst()) {
 					lastRetrievedTweetId = status.getId();
-					Log.i(this.getClass().getName(), "Timeline populated from database");
+					Log.i(this.getClass().getName(),
+							"Timeline populated from database, last retrieved tweet id: " + lastRetrievedTweetId);
 				}
 			} catch (TwitterException e) {
 				e.printStackTrace();
 			}
-            cursor.moveToNext();
-            
-        }
-        cursor.close();
-        dbAdapter.close();
+			cursor.moveToNext();
+
+		}
+		cursor.close();
+		dbAdapter.close();
 	}
 	
 	private void executeTask(){
-		Log.i(getClass().getSimpleName(), "Trayendo timeline...");
+		Log.i(getClass().getSimpleName(), "Retrieving timeline, Last retrieved tweet id: " + lastRetrievedTweetId);
     	String response = null;
     	try {
     		//Get new tweets
@@ -173,14 +177,31 @@ public class TimelineService extends Service {
     	tweet_username.setText("@"+status.getUser().getScreenName()+" ("+status.getUser().getName()+")");
     	tweet_text.setText(status.getText());
     	
+    	//Load image
+    	ImageView tweet_user_image = (ImageView) inflatedView.findViewById(R.id.tweet_user_image);
+		try{
+			String url = status.getUser().getProfileImageURL().toString();
+			
+			Drawable profilePicture = drawable_from_url(url, "image");
+			tweet_user_image.setBackgroundDrawable(profilePicture);    	    					
+		}catch (Exception e) {
+			//load default picture and log the error
+			tweet_user_image.setBackgroundDrawable(getResources().getDrawable(R.drawable.defaultavatar));
+			Log.w(getClass().getSimpleName(), "No se pudo cargar la imagen");
+		}
+    	
     	// Reflejamos la tarea en la actividad principal
 	    final Message message = new Message();
 	    ArrayList<Object> arrayMessage = new ArrayList<Object>();
+	    arrayMessage.add(getString(R.string.TimelineServiceId));
 	    arrayMessage.add(inflatedView);
-	    arrayMessage.add(status.getUser().getProfileImageURL().toString());
         message.obj = arrayMessage;
         uiHandler = TimelineService.timelineActivity.getMyHandler();
         uiHandler.sendMessage(message);
+	}
+	
+	public android.graphics.drawable.Drawable drawable_from_url(String url, String src_name) throws java.net.MalformedURLException, java.io.IOException {
+	    return android.graphics.drawable.Drawable.createFromStream(((java.io.InputStream)new java.net.URL(url).getContent()), src_name);
 	}
             
 }
