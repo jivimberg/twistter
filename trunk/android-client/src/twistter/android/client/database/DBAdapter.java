@@ -54,23 +54,15 @@ public class DBAdapter {
          return db.insert(TWEETS_TABLE_NAME, null, values);
      }
 
-     //---updates a tweet---
-     public boolean updateTweet(long rowId, String username, String json) 
-     {
-         ContentValues newValues = createContentValues(username, json);
-         return db.update(TWEETS_TABLE_NAME, newValues, 
-                          KEY_ROWID + "=" + rowId, null) > 0;
-     }
-     
      //---deletes tweet---
-     public boolean deleteTodo(long rowId) {
+     public boolean deleteTweet(long rowId) {
  		return db.delete(TWEETS_TABLE_NAME, KEY_ROWID + "=" + rowId, null) > 0;
  	}
   
      public Cursor getLastNTweets(int n) 
      {
 		return db.query(TWEETS_TABLE_NAME,
-				new String[] { KEY_ROWID, KEY_USERNAME, KEY_JSON }, null, null, null, null, null, Integer.valueOf(n).toString());
+				new String[] { KEY_ROWID, KEY_USERNAME, KEY_JSON }, null, null, null, null, KEY_ROWID + " DESC", Integer.valueOf(n).toString());
      }
      
    //---retrieves all the titles---
