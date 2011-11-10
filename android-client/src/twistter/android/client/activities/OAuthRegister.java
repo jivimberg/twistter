@@ -3,10 +3,8 @@ package twistter.android.client.activities;
 import java.net.MalformedURLException;
 
 import twistter.android.client.R;
-import twistter.android.client.utils.MyHttpClient;
 import twistter.android.client.ws.interfaces.HessianServiceProvider;
 import twistter.android.client.ws.interfaces.RegisterWebService;
-import twistter.android.client.ws.interfaces.TimelineWebService;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -30,7 +28,7 @@ public class OAuthRegister extends Activity {
 	private RequestToken requestToken;
 	private String REGISTER_WEB_SERVICE_URL;
 	
-	
+	 
     /** Called when the activity is first created. */
 	public void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
@@ -42,15 +40,16 @@ public class OAuthRegister extends Activity {
         twitter = createAuthenticatedService();
         try {
 			requestToken = twitter.getOAuthRequestToken(CALLBACK_URL.toString());
+			//open browser with oAuthURL
+			String oAuthURL = requestToken.getAuthorizationURL();
+			this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(oAuthURL)));
 		} catch (TwitterException e) {
 			Log.e(getClass().getSimpleName(), e.toString());
 			e.printStackTrace();
+			Intent myIntent = new Intent(this, LoginActivity.class);
+	    	startActivity(myIntent);
+	    	Toast.makeText(getApplicationContext(),"Sorry no connection available, try again later",Toast.LENGTH_SHORT).show();
 		}
-
-		//open browser with oAuthURL
-        String oAuthURL = requestToken.getAuthorizationURL();
-		this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(oAuthURL)));
-		
     }
 
     protected void onNewIntent(Intent intent) { 
@@ -87,6 +86,9 @@ public class OAuthRegister extends Activity {
     	ConfigurationBuilder configurationBuilder = new ConfigurationBuilder(); 
     	configurationBuilder.setOAuthConsumerKey(CONSUMER_KEY); 
     	configurationBuilder.setOAuthConsumerSecret(CONSUMER_SECRET); 
+//    	configurationBuilder.setHttpProxyHost("192.168.251.33");
+//    	configurationBuilder.setHttpProxyPort(8080);
+//    	configurationBuilder.setUseSSL(false);
     	Configuration configuration = configurationBuilder.build(); 
 		return new TwitterFactory(configuration).getInstance(); 
 	}
