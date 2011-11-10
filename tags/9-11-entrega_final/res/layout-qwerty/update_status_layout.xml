@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:orientation="vertical">
+  
+  <EditText 
+  android:layout_marginLeft="10dip" 
+  android:id="@+id/statusText" 
+  android:layout_width="fill_parent" 
+  android:gravity="top" 
+  android:layout_height="wrap_content" 
+  android:layout_marginRight="10dip" android:lines="7" />
+            
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="wrap_content"
+    android:orientation = "horizontal" android:gravity="right" >
+    
+	   <TextView
+	        android:id="@+id/counter"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" 
+	        android:text="140 characters left"
+	        android:layout_marginLeft="5dip"
+	        android:gravity="left"/>
+	        
+	   <Button
+	        android:id="@+id/tweet_button"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_toRightOf="@id/counter"
+	        android:layout_marginLeft="15dip"
+	        android:layout_marginRight="10dip"
+	        android:text="Tweet!" /> 
+  </LinearLayout>          
+  
+
+</LinearLayout>

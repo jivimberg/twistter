@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="twistter.android.client"
+      android:versionCode="1"
+      android:versionName="1.0">
+
+<uses-permission android:name="android.permission.INTERNET" />
+
+    <application android:icon="@drawable/icon" android:debuggable="true">
+        <activity android:name=".activities.LoginActivity"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".activities.TimelineActivity"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.TIMELINE" />
+                <category android:name="android.intent.category.CATEGORY_ALTERNATIVE" />
+            </intent-filter>
+        </activity>
+        
+          <activity android:name=".activities.UpdateStatusActivity"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.CATEGORY_ALTERNATIVE" />
+            </intent-filter>
+        </activity>
+        
+        <!-- For testing puposes only -->
+        <activity android:name=".activities.DBActivity"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.CATEGORY_ALTERNATIVE" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".activities.OAuthRegister"
+                  android:label="@string/app_name"
+                  android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT"></category> 
+ 			    <category android:name="android.intent.category.BROWSABLE"></category> 
+  				<data android:scheme="twistter" android:host="register"></data> 
+            </intent-filter>
+        </activity>
+        
+        <service android:name=".services.TimelineService" android:label="@string/app_name"></service>
+
+    </application>
+</manifest>

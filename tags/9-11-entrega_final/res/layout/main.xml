@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout android:id="@+id/widget49"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<ImageView android:layout_width="139px" android:id="@+id/logo"
+		android:layout_height="201px" android:src="@drawable/tornado"
+		android:layout_x="79dip" android:layout_y="17dip"></ImageView>
+	<EditText android:layout_width="168px" android:text="EditText"
+		android:id="@+id/edittext_username" android:textSize="18sp"
+		android:layout_height="wrap_content" android:layout_x="127dip"
+		android:layout_y="229dip"></EditText>
+	<TextView android:layout_width="wrap_content" android:text="Usuario"
+		android:id="@+id/viewtext_username" android:layout_height="wrap_content"
+		android:layout_x="41dip" android:layout_y="245dip"></TextView>
+
+<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/saveuser" android:text="Save Username" android:layout_x="92dip" android:layout_y="382dip"></CheckBox>
+
+<Button android:layout_width="144px" android:id="@+id/button_login" android:text="Login" android:layout_height="wrap_content" android:layout_x="73dip" android:layout_y="341dip"></Button>
+<Button android:layout_width="wrap_content" android:id="@+id/button_register" android:text="Register" android:layout_height="wrap_content" android:layout_x="234dip" android:layout_y="341dip"></Button>
+</AbsoluteLayout>
