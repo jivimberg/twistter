@@ -107,7 +107,7 @@ public class TimelineService extends Service {
 		// Get tweets from the database and send them to the UI
 		dbAdapter = new DBAdapter(timelineActivity);
 		dbAdapter.open();
-		final Cursor cursor = dbAdapter.getLastNTweets(30);
+		final Cursor cursor = dbAdapter.getLastNTweets(10);
 		if (!cursor.moveToFirst()) {
 			return;
 		}
@@ -180,10 +180,11 @@ public class TimelineService extends Service {
     	//Load image
     	ImageView tweet_user_image = (ImageView) inflatedView.findViewById(R.id.tweet_user_image);
 		try{
-			String url = status.getUser().getProfileImageURL().toString();
-			
-			Drawable profilePicture = drawable_from_url(url, "image");
-			tweet_user_image.setBackgroundDrawable(profilePicture);    	    					
+//			String url = status.getUser().getProfileImageURL().toString();
+//			
+//			Drawable profilePicture = drawable_from_url(url, "image");
+//			tweet_user_image.setBackgroundDrawable(profilePicture);    	    					
+			tweet_user_image.setBackgroundDrawable(getResources().getDrawable(R.drawable.defaultavatar));
 		}catch (Exception e) {
 			//load default picture and log the error
 			tweet_user_image.setBackgroundDrawable(getResources().getDrawable(R.drawable.defaultavatar));

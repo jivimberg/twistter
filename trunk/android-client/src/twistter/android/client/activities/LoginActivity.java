@@ -23,7 +23,7 @@ public class LoginActivity extends Activity {
     Button ok;
     Button register;
     ImageView logo;
-    CheckBox savepass;
+    CheckBox saveuser;
     
     
     public void onCreate(Bundle savedInstanceState) {
@@ -31,18 +31,17 @@ public class LoginActivity extends Activity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.main);
         un=(EditText)findViewById(R.id.edittext_username);
-        pw=(EditText)findViewById(R.id.edittext_password);
+        //pw=(EditText)findViewById(R.id.edittext_password);
         ok=(Button)findViewById(R.id.button_login);
         register = (Button) findViewById(R.id.button_register);
         logo = (ImageView) findViewById(R.id.logo);
-        savepass = (CheckBox) findViewById(R.id.savepass);
+        saveuser = (CheckBox) findViewById(R.id.saveuser);
         final SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.PrefsName), MODE_PRIVATE); 
         
         LOGIN_WEBSERVICE = "http://" + getString(R.string.ServerIP) + ":" 
     	+ getString(R.string.ServerPort) + "/" + getString(R.string.ServerRootName) + "/" + getString(R.string.LoginWebService);
 
         ok.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View v) {
             	
             	String response;
@@ -61,7 +60,7 @@ public class LoginActivity extends Activity {
 	        	    	LoginActivity.this.startActivity(myIntent);
 	                    Toast.makeText(getApplicationContext(),"Logged in Successfully",Toast.LENGTH_SHORT).show();
                 	}else{
-                        Toast.makeText(getApplicationContext(),"Incorrect Username or Password",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),"Incorrect Username",Toast.LENGTH_LONG).show();
 
                 	}
             	} catch (Exception  e) {

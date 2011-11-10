@@ -1,6 +1,8 @@
 package twistter.android.client.database;
+import twistter.android.client.R;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -27,11 +29,13 @@ public class DBAdapter {
     
     private DatabaseHelper DBHelper;
     private SQLiteDatabase db;
+    final SharedPreferences sharedPreferences;
     
     public DBAdapter(Context ctx) 
     {
         this.context = ctx;
         DBHelper = new DatabaseHelper(context);
+        sharedPreferences = context.getSharedPreferences(context.getString(R.string.PrefsName), context.MODE_PRIVATE); 
     }
         
     //---opens the database---
@@ -62,22 +66,24 @@ public class DBAdapter {
      public Cursor getLastNTweets(int n) 
      {
 		return db.query(TWEETS_TABLE_NAME,
-				new String[] { KEY_ROWID, KEY_USERNAME, KEY_JSON }, null, null, null, null, KEY_ROWID + " DESC", Integer.valueOf(n).toString());
+				new String[] { KEY_ROWID, KEY_USERNAME, KEY_JSON },  KEY_USERNAME + "='" + sharedPreferences.getString(context.getString(R.string.PrefUserName), null) + "'", null, null, null, KEY_ROWID + " DESC", Integer.valueOf(n).toString());
+//		return db.query(TWEETS_TABLE_NAME,
+//				new String[] { KEY_ROWID, KEY_USERNAME, KEY_JSON },  null, null, null, null, KEY_ROWID + " DESC", Integer.valueOf(n).toString());
      }
      
    //---retrieves all the titles---
-     public Cursor getAllTweets() 
-     {
-		return db.query(TWEETS_TABLE_NAME,
-				new String[] { KEY_ROWID, KEY_USERNAME, KEY_JSON }, null, null, null, null, null, null);
-     }
-     
-     //---retrieves all the titles---
-     public Cursor getAllTweetsFrom(int id) 
-     {
-		return db.query(TWEETS_TABLE_NAME,
-				new String[] { KEY_ROWID, KEY_USERNAME, KEY_JSON }, KEY_ROWID + ">" + id, null, null, null, null);
-     }
+//     public Cursor getAllTweets() 
+//     {
+//		return db.query(TWEETS_TABLE_NAME,
+//				new String[] { KEY_ROWID, KEY_USERNAME, KEY_JSON },  KEY_USERNAME + "=" + sharedPreferences.getString(context.getString(R.string.PrefUserName), null), null, null, null, null, null);
+//     }
+//     
+//     //---retrieves all the titles---
+//     public Cursor getAllTweetsFrom(int id) 
+//     {
+//		return db.query(TWEETS_TABLE_NAME,
+//				new String[] { KEY_ROWID, KEY_USERNAME, KEY_JSON }, KEY_ROWID + ">" + id, null, null, null, null);
+//     }
      
      //---retrieves a single tweet---
      public Cursor fetchTweet(long rowId) throws SQLException {
